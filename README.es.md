@@ -11,10 +11,14 @@
 
 El repositorio está organizado de la siguiente manera:
 
-- **Proyecto 1:** _El primer proyecto fue hacer una cajero en pseint._
+- **1er Semestre:** _Desarrollé habilidades fundamentales en pensamiento computacional y diseño de algoritmos utilizando pseudocódigo._
 
-- **Proyecto 2:** _El segundo fue igual al primero pero en c._
+- **2do Semestre:** _Desarrollé aplicaciones procedimentales en C, incluyendo un sistema de cajero automático y un sistema de gestión de aerolínea con operaciones CRUD._
 
-- **Proyecto 3:** _El tercer proyecto fue hacer un servicio de aerolínea comprar boletos, cancelar boletos. Fue un proyecto para practicar el CRUD._
+- **3er Semestre:** _Diseñé un sistema backend utilizando principios de programación orientada a objetos, complementado con documentación técnica sobre MySQL, APIs y configuración de entornos._
 
-- **Proyecto 4:** _El cuarto proyecto fue hacer una sistema de ventas comprar productos por categorias, eliminar productos y hacer una factura al final_
+- **4to Semestre:** _Implementé estructuras de datos y algoritmos avanzados en Python, junto con un proyecto de simulación de Física I utilizando tecnologías web._
+
+- **5to Semestre:** _Desarrollé simulaciones interactivas y una aplicación gráfica 2D con animaciones, integración de audio y mecánicas de juego._
+
+- **6to Semestre:** _Desarrollé un sistema full-stack basado en PHP con autenticación, módulos CRUD, facturación, manejo de archivos y automatización de respaldos de base de datos._

@@ -11,10 +11,14 @@
 
 The repository is structured as follows:
 
-- **Project 1:** _The first project was to create an ATM in Pseudocode._
+- **1st Semester:** _Built foundational skills in computational thinking and algorithm design using pseudocode._
 
-- **Project 2:** _The second one was similar to the first but in C._
+- **2nd Semester:** _Developed procedural applications in C, including an ATM system and an airline management system with CRUD operations._
 
-- **Project 3:** _The third project involved creating an airline service to buy tickets, cancel tickets. It was a project to practice CRUD operations._
+- **3rd Semester:** _Designed a backend system using object-oriented programming principles, complemented by extensive technical documentation (MySQL, APIs, environment configuration)._
 
-- **Project 4:** _The fourth project was to create a sales system to buy products by categories, delete products, and generate an invoice at the end._
+- **4th Semester:** _Implemented advanced data structures and algorithms in Python, combined with a Physics I simulation project using web technologies._
+
+- **5th Semester:** _Created interactive simulations and a 2D graphical application with animations, audio integration, and game mechanics._
+
+- **6th Semester:** _Engineered a full-stack PHP-based management system with authentication, CRUD modules, invoicing, file handling, and database backup automation._
