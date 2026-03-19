@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora Fuerza de Lorentz</title>
+    <link rel="stylesheet"
+        href="style.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar"
+        style="background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%); padding: 0.5rem 0; box-shadow: 0 2px 8px rgba(30,60,114,0.08);">
+        <ul style="display: flex; justify-content: center; gap: 2rem; margin: 0; padding: 0; list-style: none;">
+            <li>
+                <a href="index.html"
+                    style="color: #fff; font-weight: 600; text-decoration: none; font-size: 1.1rem; padding: 0.5rem 1.2rem; border-radius: 6px; transition: background 0.2s;">
+                    Inicio
+                </a>
+            </li>
+            <li>
+                <a href="enunciado.html"
+                    style="color: #fff; font-weight: 600; text-decoration: none; font-size: 1.1rem; padding: 0.5rem 1.2rem; border-radius: 6px; transition: background 0.2s;">
+                    Enunciado
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <script>
+        // Navbar hover effect
+        document.querySelectorAll('.navbar a').forEach(a => {
+            a.addEventListener('mouseenter', () => {
+                a.style.background = 'rgba(255,255,255,0.15)';
+            });
+            a.addEventListener('mouseleave', () => {
+                a.style.background = 'none';
+            });
+        });
+    </script>
+    <h1 class="titulo">Calculadora Fuerza de Lorentz</h1>
+    <div id="enunciado"
+        class="enunciado"></div>
+
+    <div class="form-section">
+        <label for="tipo">Selecciona el tipo de ejercicio:</label>
+        <select id="tipo"
+            class="input-control">
+            <option value="1">1 - Movimiento circular</option>
+            <option value="2">2 - Campo E (aceleración lineal)</option>
+            <option value="3">3 - Campo E y B perpendiculares</option>
+            <option value="4">4 - Producto vectorial completo</option>
+            <option value="5">5 - Movimiento helicoidal</option>
+            <option value="6">6 - Magnitud velocidad (F conocida)</option>
+            <option value="7">7 - Fuerza total vectorial</option>
+        </select>
+
+        <label><span id="q-label"></span> (Carga en coulombs)</label>
+        <input type="number"
+            id="q"
+            step="any"
+            class="input-control">
+
+        <label><span id="m-label"></span> (Masa en kilogramos)</label>
+        <input type="number"
+            id="m"
+            step="any"
+            class="input-control">
+
+        <label><span id="vx-label"></span> (Velocidad en eje X en m/s)</label>
+        <input type="number"
+            id="vx"
+            step="any"
+            class="input-control">
+
+        <label><span id="vy-label"></span> (Velocidad en eje Y en m/s)</label>
+        <input type="number"
+            id="vy"
+            step="any"
+            class="input-control">
+
+        <label><span id="vz-label"></span> (Velocidad en eje Z en m/s)</label>
+        <input type="number"
+            id="vz"
+            step="any"
+            class="input-control">
+
+        <label><span id="Ex-label"></span> (Campo eléctrico X en V/m)</label>
+        <input type="number"
+            id="Ex"
+            step="any"
+            class="input-control">
+
+        <label><span id="Ey-label"></span> (Campo eléctrico Y en V/m)</label>
+        <input type="number"
+            id="Ey"
+            step="any"
+            class="input-control">
+
+        <label><span id="Ez-label"></span> (Campo eléctrico Z en V/m)</label>
+        <input type="number"
+            id="Ez"
+            step="any"
+            class="input-control">
+
+        <label><span id="Bx-label"></span> (Campo magnético X en tesla)</label>
+        <input type="number"
+            id="Bx"
+            step="any"
+            class="input-control">
+
+        <label><span id="By-label"></span> (Campo magnético Y en tesla)</label>
+        <input type="number"
+            id="By"
+            step="any"
+            class="input-control">
+
+        <label><span id="Bz-label"></span> (Campo magnético Z en tesla)</label>
+        <input type="number"
+            id="Bz"
+            step="any"
+            class="input-control">
+
+        <label><span id="t-label"></span> (Tiempo en segundos)</label>
+        <input type="number"
+            id="t"
+            step="any"
+            class="input-control">
+
+        <label><span id="F-label"></span> (Magnitud de la fuerza en newtons)</label>
+        <input type="number"
+            id="F"
+            step="any"
+            class="input-control">
+
+
+        <button onclick="resolver()"
+            class="btn-calcular">Calcular</button>
+    </div>
+
+    <div id="resultado"
+        class="output"></div>
+    <div id="resolucion"
+        class="output"></div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

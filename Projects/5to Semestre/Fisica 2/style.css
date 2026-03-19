@@ -1,0 +1,103 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 2rem;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.titulo {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #1e2a38;
+}
+
+.form-section {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+label {
+    margin-top: 1rem;
+    display: block;
+    font-weight: bold;
+}
+
+.input-control {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    margin-top: 0.3rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.btn-calcular {
+    margin-top: 1.5rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-calcular:hover {
+    background-color: #0056b3;
+}
+
+.output {
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: 'Courier New', monospace;
+}
+
+#resultado,
+#resolucion {
+    overflow-x: auto;
+    max-width: 100%;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 8px;
+    border: 1px solid #dcdcdc;
+    font-size: 1.05em;
+    line-height: 1.4em;
+    word-wrap: break-word;
+}
+
+.katex-display {
+    overflow-x: auto;
+    display: block;
+}
+
+.enunciado-latex {
+    margin: 1rem auto;
+    padding: 1rem;
+    max-width: 800px;
+    border-left: 4px solid #007bff;
+    background-color: #f8f9fa;
+    font-size: 1rem;
+}
+
+textarea.input-control.no-scroll-x {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    margin-top: 0.3rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+    overflow-x: hidden;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}

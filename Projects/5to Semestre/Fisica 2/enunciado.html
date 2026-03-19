@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Campos — Fuerza de Lorentz</title>
+    <link rel="stylesheet"
+        href="style.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+</head>
+
+<body>
+
+    <nav class="navbar"
+        style="background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%); padding: 0.5rem 0; box-shadow: 0 2px 8px rgba(30,60,114,0.08);">
+        <ul style="display: flex; justify-content: center; gap: 2rem; margin: 0; padding: 0; list-style: none;">
+            <li>
+                <a href="index.html"
+                    style="color: #fff; font-weight: 600; text-decoration: none; font-size: 1.1rem; padding: 0.5rem 1.2rem; border-radius: 6px; transition: background 0.2s;">
+                    Inicio
+                </a>
+            </li>
+            <li>
+                <a href="enunciado.html"
+                    style="color: #fff; font-weight: 600; text-decoration: none; font-size: 1.1rem; padding: 0.5rem 1.2rem; border-radius: 6px; transition: background 0.2s;">
+                    Enunciado
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <h2 style="text-align: center;">Todos los Campos — Fuerza de Lorentz</h2>
+
+    <form class="form-section">
+
+        <!-- ENUNCIADO MANUAL -->
+        <label for="enunciado-text">Escribe tu enunciado (Fuerza de Lorentz):</label>
+        <textarea id="enunciado"
+            class="input-control"
+            rows="5"
+            placeholder="Ejemplo: Una partícula con carga -1.6×10⁻¹⁹ C se mueve con velocidad v = 3×10⁵ m/s perpendicular a un campo magnético B = 0.02 T. Calcula la fuerza magnética que actúa sobre ella.">
+        </textarea>
+
+
+
+        <div id="campos-ocultos"
+            style="display: none;">
+            <!-- CARGA -->
+            <label><span id="q-label"></span> (Carga eléctrica en C)</label>
+            <input type="number"
+                id="q"
+                step="any"
+                class="input-control">
+
+            <!-- MASA -->
+            <label><span id="m-label"></span> (Masa en kg)</label>
+            <input type="number"
+                id="m"
+                step="any"
+                class="input-control">
+
+            <!-- VELOCIDAD -->
+            <label><span id="vx-label"></span> (Velocidad en X en m/s)</label>
+            <input type="number"
+                id="vx"
+                step="any"
+                class="input-control">
+
+            <label><span id="vy-label"></span> (Velocidad en Y en m/s)</label>
+            <input type="number"
+                id="vy"
+                step="any"
+                class="input-control">
+
+            <label><span id="vz-label"></span> (Velocidad en Z en m/s)</label>
+            <input type="number"
+                id="vz"
+                step="any"
+                class="input-control">
+
+            <!-- CAMPO ELÉCTRICO -->
+            <label><span id="Ex-label"></span> (Campo eléctrico X en V/m)</label>
+            <input type="number"
+                id="Ex"
+                step="any"
+                class="input-control">
+
+            <label><span id="Ey-label"></span> (Campo eléctrico Y en V/m)</label>
+            <input type="number"
+                id="Ey"
+                step="any"
+                class="input-control">
+
+            <label><span id="Ez-label"></span> (Campo eléctrico Z en V/m)</label>
+            <input type="number"
+                id="Ez"
+                step="any"
+                class="input-control">
+
+            <!-- CAMPO MAGNÉTICO -->
+            <label><span id="Bx-label"></span> (Campo magnético X en T)</label>
+            <input type="number"
+                id="Bx"
+                step="any"
+                class="input-control">
+
+            <label><span id="By-label"></span> (Campo magnético Y en T)</label>
+            <input type="number"
+                id="By"
+                step="any"
+                class="input-control">
+
+            <label><span id="Bz-label"></span> (Campo magnético Z en T)</label>
+            <input type="number"
+                id="Bz"
+                step="any"
+                class="input-control">
+
+            <!-- TIEMPO -->
+            <label><span id="t-label"></span> (Tiempo en segundos)</label>
+            <input type="number"
+                id="t"
+                step="any"
+                class="input-control">
+
+            <!-- FUERZA (cuando se conoce) -->
+            <label><span id="F-label"></span> (Fuerza en newtons)</label>
+            <input type="number"
+                id="F"
+                step="any"
+                class="input-control">
+        </div>
+
+        <!-- BOTÓN -->
+        <button type="submit"
+            class="btn-calcular">Enviar</button>
+    </form>
+
+    <!-- KaTeX para simbología -->
+    <script src="main.js"></script>
+
+    <div id="datos-extraidos"
+        style="display: none; margin-top: 2rem;">
+        <h3 style="margin-bottom: 1rem;">Datos del ejercicio</h3>
+        <table style="width:100%; border-collapse: collapse; background-color: #1c1c1c; border: 1px solid #444;">
+            <thead>
+                <tr style="background-color: #2c2c2c;">
+                    <th style="padding: 10px; border: 1px solid #444;">Símbolo</th>
+                    <th style="padding: 10px; border: 1px solid #444;">Significado</th>
+                    <th style="padding: 10px; border: 1px solid #444;">Valor</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-datos">
+                <!-- JS insertará las filas aquí -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- RESULTADO Y PROCEDIMIENTO -->
+    <div id="resultado-container"
+        style="margin-top: 20px; padding: 15px; border: 2px solid #444; display: none;">
+        <h3>Procedimiento</h3>
+        <div id="katex-procedimiento"></div>
+        <h3>Resultado</h3>
+        <div id="resultado-final"
+            style="font-weight: bold; font-size: 1.2em;"></div>
+    </div>
+
+
+</body>
+
+</html>
