@@ -1,0 +1,1350 @@
+/* =========================================================
+   Arduino Simulator — Complete Logic
+   ========================================================= */
+
+(function () {
+  'use strict';
+
+  // =========================================================
+  // Config
+  // =========================================================
+  var PROTO_ROWS = 10;
+  var PROTO_COLS = 15;
+  var GAP_COL = 7;
+  var LED_COLORS = [
+    { name: 'Rojo', value: '#ef4444' },
+    { name: 'Verde', value: '#22c55e' },
+    { name: 'Azul', value: '#3b82f6' },
+    { name: 'Amarillo', value: '#eab308' },
+    { name: 'Blanco', value: '#f8fafc' },
+    { name: 'Naranja', value: '#f97316' },
+    { name: 'Rosa', value: '#ec4899' },
+    { name: 'Cian', value: '#06b6d4' },
+  ];
+
+  // =========================================================
+  // State
+  // =========================================================
+  var state = {
+    components: [],
+    wires: [],
+    selectedComponent: null,
+    wireSource: null,
+    dragActive: false,
+    simulating: false,
+    simulationTimers: [],
+    currentExample: null,
+    wireColor: '#3b82f6',
+    simListeners: [],
+  };
+
+  // =========================================================
+  // DOM refs
+  // =========================================================
+  var dom = {};
+
+  // =========================================================
+  // Examples
+  // =========================================================
+  var examples = [
+    {
+      id: 'led-on',
+      name: 'LED Encendido',
+      code: 'int led = 13;\n\nvoid setup() {\n  pinMode(led, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(led, HIGH);\n}',
+      circuit: {
+        components: [
+          { type: 'led', row: 2, col: 3, extra: { color: '#ef4444' } },
+          { type: 'resistor', row: 3, col: 3, extra: {} },
+        ],
+        wires: [
+          { from: 'D13', to: { row: 2, col: 3 }, color: '#3b82f6' },
+          { from: 'GND', to: { row: 3, col: 14 }, color: '#1e293b' },
+        ],
+      },
+      run: function (done) {
+        var led = findCompEl('led');
+        if (!led) { done(); return; }
+        var bulb = led.querySelector('.led-bulb');
+        if (bulb) bulb.classList.add('on');
+        statusMsg('LED encendido — pin 13 = HIGH', 'running');
+        done();
+      },
+    },
+    {
+      id: 'blink',
+      name: 'LED Parpadeante',
+      code: 'int led = 13;\n\nvoid setup() {\n  pinMode(led, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(led, HIGH);\n  delay(1000);\n  digitalWrite(led, LOW);\n  delay(1000);\n}',
+      circuit: {
+        components: [
+          { type: 'led', row: 2, col: 3, extra: { color: '#ef4444' } },
+          { type: 'resistor', row: 3, col: 3, extra: {} },
+        ],
+        wires: [
+          { from: 'D13', to: { row: 2, col: 3 }, color: '#3b82f6' },
+          { from: 'GND', to: { row: 3, col: 14 }, color: '#1e293b' },
+        ],
+      },
+      run: function (done) {
+        var led = findCompEl('led');
+        if (!led) { done(); return; }
+        var bulb = led.querySelector('.led-bulb');
+        if (!bulb) { done(); return; }
+        var on = false;
+        var timer = setInterval(function () {
+          on = !on;
+          bulb.classList.toggle('on', on);
+          statusMsg(on ? 'LED encendido' : 'LED apagado', 'running');
+        }, 1000);
+        state.simulationTimers.push(timer);
+        done();
+      },
+    },
+    {
+      id: 'button',
+      name: 'LED con Pulsador',
+      code: 'int boton = 2;\nint led = 13;\nint estadoBoton = 0;\n\nvoid setup() {\n  pinMode(boton, INPUT);\n  pinMode(led, OUTPUT);\n}\n\nvoid loop() {\n  estadoBoton = digitalRead(boton);\n  if (estadoBoton == HIGH) {\n    digitalWrite(led, HIGH);\n  } else {\n    digitalWrite(led, LOW);\n  }\n}',
+      circuit: {
+        components: [
+          { type: 'led', row: 2, col: 3, extra: { color: '#ef4444' } },
+          { type: 'resistor', row: 4, col: 3, extra: {} },
+          { type: 'button', row: 7, col: 3, extra: {} },
+        ],
+        wires: [
+          { from: 'D13', to: { row: 2, col: 3 }, color: '#3b82f6' },
+          { from: 'GND', to: { row: 4, col: 14 }, color: '#1e293b' },
+          { from: 'D2', to: { row: 7, col: 3 }, color: '#22c55e' },
+          { from: '5V', to: { row: 7, col: 1 }, color: '#ef4444' },
+          { from: 'GND', to: { row: 7, col: 9 }, color: '#1e293b' },
+        ],
+      },
+      run: function (done) {
+        var led = findCompEl('led');
+        var btn = findCompEl('button');
+        if (!led || !btn) { done(); return; }
+        var bulb = led.querySelector('.led-bulb');
+        var cap = btn.querySelector('.button-cap');
+        if (!bulb || !cap) { done(); return; }
+
+        function press() {
+          cap.classList.add('pressed');
+          bulb.classList.add('on');
+          statusMsg('LED encendido — botón presionado', 'running');
+        }
+        function release() {
+          cap.classList.remove('pressed');
+          bulb.classList.remove('on');
+          statusMsg('LED apagado — botón liberado', 'running');
+        }
+
+        cap.addEventListener('mousedown', press);
+        cap.addEventListener('mouseup', release);
+        cap.addEventListener('mouseleave', release);
+        cap.addEventListener('touchstart', press, { passive: true });
+        cap.addEventListener('touchend', release, { passive: true });
+        cap.style.cursor = 'pointer';
+
+        state.simListeners.push(
+          { el: cap, type: 'mousedown', fn: press },
+          { el: cap, type: 'mouseup', fn: release },
+          { el: cap, type: 'mouseleave', fn: release },
+          { el: cap, type: 'touchstart', fn: press },
+          { el: cap, type: 'touchend', fn: release },
+        );
+
+        done();
+      },
+    },
+  ];
+
+  // =========================================================
+  // Helpers
+  // =========================================================
+  function statusMsg(msg, type) {
+    if (dom.statusMsg) dom.statusMsg.textContent = msg || 'Listo';
+    if (dom.statusDot) {
+      dom.statusDot.className = 'status-dot ' + (type || 'idle');
+    }
+  }
+
+  function findCompEl(type) {
+    for (var i = 0; i < state.components.length; i++) {
+      if (state.components[i].type === type) return state.components[i].el;
+    }
+    return null;
+  }
+
+  function findPinEl(pinId) {
+    return dom.arduinoBoard && dom.arduinoBoard.querySelector(
+      '.arduino-pin[data-pin-id="' + pinId + '"]'
+    );
+  }
+
+  function findHoleEl(row, col) {
+    return dom.protoGrid && dom.protoGrid.querySelector(
+      '.proto-cell[data-row="' + row + '"][data-col="' + col + '"]'
+    );
+  }
+
+  function centerRel(el, ref) {
+    if (!el || !ref) return { x: 0, y: 0 };
+    var er = el.getBoundingClientRect();
+    var rr = ref.getBoundingClientRect();
+    return {
+      x: er.left + er.width / 2 - rr.left,
+      y: er.top + er.height / 2 - rr.top,
+    };
+  }
+
+  function compName(type) {
+    return { led: 'LED', resistor: 'Resistencia 220\u03A9', button: 'Pulsador' }[type] || type;
+  }
+
+  function compValue(comp) {
+    if (comp.type === 'led') return comp.extra.color || '#ef4444';
+    if (comp.type === 'resistor') return '220\u03A9';
+    if (comp.type === 'button') return 'Pulsador NA';
+    return '';
+  }
+
+  // =========================================================
+  // Syntax Highlighting (Arduino C++)
+  // =========================================================
+  function escapeHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function createSyntaxTokenizer() {
+    var tokens = [];
+    function indexToLetters(n) {
+      var s = '';
+      do { s = String.fromCharCode(97 + (n % 26)) + s; n = Math.floor(n / 26); } while (n > 0);
+      return s;
+    }
+    function addToken(html) {
+      var token = '\u00A7\u00A7SYNTAX_PLACEHOLDER_' + indexToLetters(tokens.length) + '\u00A7\u00A7';
+      tokens.push({ token: token, html: html });
+      return token;
+    }
+    function restore(code) {
+      var r = code;
+      tokens.forEach(function (item) { r = r.split(item.token).join(item.html); });
+      return r;
+    }
+    return { addToken: addToken, restore: restore };
+  }
+
+  function highlightWithTokenRegex(code, regex, className, tokenizer) {
+    var fn = tokenizer.addToken;
+    return code.replace(regex, function (m) { return fn('<span class="' + className + '">' + m + '</span>'); });
+  }
+
+  function highlightArduinoCode(rawCode) {
+    var code = escapeHtml(rawCode);
+    var tokenizer = createSyntaxTokenizer();
+
+    code = highlightWithTokenRegex(code, /\/\/.*$/gm, 'syntax-comment', tokenizer);
+    code = highlightWithTokenRegex(code, /\/\*[\s\S]*?\*\//g, 'syntax-comment', tokenizer);
+    code = highlightWithTokenRegex(code, /'[^']*'/g, 'syntax-string', tokenizer);
+    code = highlightWithTokenRegex(code, /"[^"]*"/g, 'syntax-string', tokenizer);
+
+    code = highlightWithTokenRegex(code,
+      /\b(void|int|float|double|char|byte|bool|boolean|long|short|unsigned|const|String)\b/g,
+      'syntax-type', tokenizer);
+    code = highlightWithTokenRegex(code,
+      /\b(if|else|for|while|do|switch|case|break|continue|return)\b/g,
+      'syntax-keyword', tokenizer);
+    code = highlightWithTokenRegex(code,
+      /\b(setup|loop|pinMode|digitalWrite|digitalRead|analogRead|analogWrite|delay|map)\b/g,
+      'syntax-function', tokenizer);
+    code = highlightWithTokenRegex(code,
+      /\b(Serial|begin|println|print|HIGH|LOW|INPUT|OUTPUT|INPUT_PULLUP|A0|A1|A2|A3|A4|A5)\b/g,
+      'syntax-constant', tokenizer);
+    code = highlightWithTokenRegex(code, /\b(\d+)\b/g, 'syntax-number', tokenizer);
+
+    return tokenizer.restore(code);
+  }
+
+  function setHighlightedCode(code) {
+    if (!dom.codeDisplay) return;
+    if (typeof window.highlightArduinoCode === 'function') {
+      dom.codeDisplay.innerHTML = window.highlightArduinoCode(code) + '\n';
+    } else {
+      dom.codeDisplay.innerHTML = highlightArduinoCode(code) + '\n';
+    }
+  }
+
+  // =========================================================
+  // Tooltips
+  // =========================================================
+  function addTooltip(el, text, row, col) {
+    var tip = document.createElement('div');
+    tip.className = 'comp-tooltip';
+    tip.style.display = 'none';
+    el.style.position = 'relative';
+    el.appendChild(tip);
+
+    function updateTip() {
+      var parts = [text + ' \u2014 F' + (row + 1) + ' C' + (col + 1)];
+      // Check wires to see which pin connects to this hole
+      for (var i = 0; i < state.wires.length; i++) {
+        var w = state.wires[i];
+        if (w.to && w.to.row === row && w.to.col === col && w.from && w.from.id) {
+          parts.push('\u2192 ' + w.from.id);
+        }
+      }
+      tip.textContent = parts.join(' ');
+    }
+
+    el.addEventListener('mouseenter', function () { updateTip(); tip.style.display = 'block'; });
+    el.addEventListener('mouseleave', function () { tip.style.display = 'none'; });
+  }
+
+  // =========================================================
+  // Component Inspector (sidebar)
+  // =========================================================
+  function updateInspector() {
+    var list = document.getElementById('inspector-list');
+    var empty = document.getElementById('inspector-empty');
+    if (!list || !empty) return;
+
+    list.innerHTML = '';
+    if (state.components.length === 0) {
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+
+    state.components.forEach(function (c) {
+      var row = c.row != null ? c.row + 1 : '\u2014';
+      var col = c.col != null ? c.col + 1 : '\u2014';
+      var item = document.createElement('div');
+      item.className = 'inspector-item';
+      item.innerHTML = '<span class="inspector-name">' + compName(c.type) + '</span>' +
+        '<span class="inspector-loc">F' + row + ' C' + col + '</span>';
+      list.appendChild(item);
+    });
+  }
+
+  // =========================================================
+  // Safe spawn position calculator
+  // Places components at a visible position near the protoboard
+  // using canvas-relative coordinates.
+  // =========================================================
+  function getSafeSpawnPosition(type) {
+    var canvas = dom.workspaceCanvas;
+    var board = dom.protoContainer;
+    if (!canvas || !board) return { x: 40, y: 80 };
+
+    var canvasRect = canvas.getBoundingClientRect();
+    var boardRect = board.getBoundingClientRect();
+
+    var boardLeft = boardRect.left - canvasRect.left;
+    var boardTop = boardRect.top - canvasRect.top;
+
+    // Place near the right side of the protoboard, inside the canvas
+    if (type === 'led') {
+      return {
+        x: boardLeft + boardRect.width - 180,
+        y: boardTop + 40,
+      };
+    }
+    if (type === 'resistor') {
+      return {
+        x: boardLeft + boardRect.width - 120,
+        y: boardTop + 80,
+      };
+    }
+    if (type === 'button') {
+      return {
+        x: boardLeft + boardRect.width - 100,
+        y: boardTop + 20,
+      };
+    }
+    return {
+      x: boardLeft + 40,
+      y: boardTop + 80,
+    };
+  }
+
+  // =========================================================
+  // Arduino
+  // =========================================================
+  function buildArduino() {
+    var c = dom.arduinoContainer;
+    c.innerHTML = '';
+
+    var board = document.createElement('div');
+    board.className = 'arduino-board';
+
+    // Top bar
+    var top = document.createElement('div');
+    top.className = 'arduino-top';
+    var usb = document.createElement('div');
+    usb.className = 'arduino-usb';
+    usb.textContent = 'USB';
+    top.appendChild(usb);
+    var pw = document.createElement('div');
+    pw.className = 'arduino-power';
+    var pj = document.createElement('div');
+    pj.className = 'power-jack';
+    pw.appendChild(pj);
+    top.appendChild(pw);
+    board.appendChild(top);
+
+    // Chip
+    var chipDiv = document.createElement('div');
+    chipDiv.className = 'arduino-chip';
+    var chip = document.createElement('div');
+    chip.className = 'chip-body';
+    chip.textContent = 'ATmega328P';
+    var sm = document.createElement('small');
+    sm.textContent = 'Powered by Arduino';
+    chip.appendChild(sm);
+    chipDiv.appendChild(chip);
+    board.appendChild(chipDiv);
+
+    // Pins — defined as [id, label]
+    var leftPins = [
+      'A0', 'A1', 'A2', 'A3', 'A4', 'A5',
+      '5V', '3V3', 'GND', 'Vin',
+    ];
+    var rightPins = [
+      'D0', 'D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7',
+      'D8', 'D9', 'D10', 'D11', 'D12', 'D13',
+    ];
+
+    var pinRow = document.createElement('div');
+    pinRow.className = 'arduino-pins';
+
+    // Left group
+    var lg = document.createElement('div');
+    lg.className = 'pin-group';
+    var ll = document.createElement('div');
+    ll.className = 'pin-group-label';
+    ll.textContent = 'ANALOG / POWER';
+    lg.appendChild(ll);
+    var lr = document.createElement('div');
+    lr.className = 'pin-row';
+    leftPins.forEach(function (id) {
+      var p = document.createElement('div');
+      p.className = 'arduino-pin';
+      p.dataset.pinId = id;
+      p.textContent = id;
+      p.title = id;
+      p.addEventListener('click', function (e) { e.stopPropagation(); onPinClick(this); });
+      lr.appendChild(p);
+    });
+    lg.appendChild(lr);
+    pinRow.appendChild(lg);
+
+    // Right group
+    var rg = document.createElement('div');
+    rg.className = 'pin-group';
+    var rl = document.createElement('div');
+    rl.className = 'pin-group-label';
+    rl.textContent = 'DIGITAL';
+    rg.appendChild(rl);
+    var rr = document.createElement('div');
+    rr.className = 'pin-row';
+    rightPins.forEach(function (id) {
+      var p = document.createElement('div');
+      p.className = 'arduino-pin';
+      p.dataset.pinId = id;
+      p.textContent = id;
+      p.title = id;
+      p.addEventListener('click', function (e) { e.stopPropagation(); onPinClick(this); });
+      rr.appendChild(p);
+    });
+    rg.appendChild(rr);
+    pinRow.appendChild(rg);
+
+    board.appendChild(pinRow);
+    c.appendChild(board);
+    dom.arduinoBoard = board;
+  }
+
+  // =========================================================
+  // Protoboard
+  // =========================================================
+  function buildProtoboard() {
+    var container = dom.protoContainer;
+    container.innerHTML = '';
+
+    var board = document.createElement('div');
+    board.className = 'protoboard';
+    board.style.position = 'relative';
+
+    var lbl = document.createElement('div');
+    lbl.className = 'protoboard-label';
+    lbl.textContent = 'PROTOBOARD';
+    board.appendChild(lbl);
+
+    // Column headers
+    var colNames = ['', '\u2212', '+', 'a', 'b', 'c', 'd', 'e', '', 'f', 'g', 'h', 'i', 'j', '+', '\u2212'];
+    var ch = document.createElement('div');
+    ch.className = 'proto-col-labels';
+    for (var ci = 0; ci < PROTO_COLS + 1; ci++) {
+      var cd = document.createElement('div');
+      cd.className = 'proto-col-label';
+      cd.textContent = colNames[ci] || '';
+      if (ci - 1 === GAP_COL) cd.textContent = '';
+      ch.appendChild(cd);
+    }
+    board.appendChild(ch);
+
+    // Grid
+    var grid = document.createElement('div');
+    grid.className = 'proto-grid';
+
+    for (var r = 0; r < PROTO_ROWS; r++) {
+      var row = document.createElement('div');
+      row.className = 'proto-row';
+
+      // Row number label
+      var rl = document.createElement('div');
+      rl.className = 'proto-row-label';
+      rl.textContent = r + 1;
+      row.appendChild(rl);
+
+      for (var col = 0; col < PROTO_COLS; col++) {
+        if (col === GAP_COL) {
+          var gap = document.createElement('div');
+          gap.className = 'proto-gap';
+          row.appendChild(gap);
+          continue;
+        }
+
+        var cell = document.createElement('div');
+        cell.className = 'proto-cell';
+        cell.dataset.row = r;
+        cell.dataset.col = col;
+
+        if (col === 0 || col === 14) cell.classList.add('rail-negative');
+        if (col === 1 || col === 13) cell.classList.add('rail-positive');
+
+        var hole = document.createElement('div');
+        hole.className = 'hole';
+        cell.appendChild(hole);
+
+        cell.addEventListener('click', function (e) {
+          e.stopPropagation();
+          onHoleClick(this);
+        });
+
+        row.appendChild(cell);
+      }
+
+      grid.appendChild(row);
+    }
+
+    board.appendChild(grid);
+    container.appendChild(board);
+    dom.protoBoard = board;
+    dom.protoGrid = grid;
+
+    // SVG overlay — cover the workspace canvas
+    if (!dom.wiresSvg) {
+      var canvas = dom.workspaceCanvas;
+      if (canvas) {
+        var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('class', 'wires-svg');
+        svg.style.position = 'absolute';
+        svg.style.top = '0';
+        svg.style.left = '0';
+        svg.style.width = '100%';
+        svg.style.height = '100%';
+        svg.style.pointerEvents = 'none';
+        svg.style.zIndex = '3';
+        canvas.appendChild(svg);
+        dom.wiresSvg = svg;
+      }
+    }
+  }
+
+  // =========================================================
+  // Component DOM
+  // =========================================================
+  function makeCompEl(type, extra) {
+    extra = extra || {};
+    var div = document.createElement('div');
+    div.className = 'component component-' + type;
+
+    var html = '';
+    if (type === 'led') {
+      var col = extra.color || '#ef4444';
+      html = '<div class="component-led">' +
+        '<div class="led-bulb" style="background:' + col + ';--led-color:' + col + ';"></div>' +
+        '<div class="led-legs"><div class="led-leg anode"></div><div class="led-leg"></div></div></div>';
+    } else if (type === 'resistor') {
+      html = '<div class="component-resistor">' +
+        '<div class="resistor-body">' +
+        '<span class="band" style="background:#ef4444;"></span>' +
+        '<span class="band" style="background:#ef4444;"></span>' +
+        '<span class="band" style="background:#fbbf24;"></span>' +
+        '<span class="band" style="background:#22c55e;"></span>' +
+        '</div>' +
+        '<div class="resistor-legs"><div class="resistor-leg"></div><div class="resistor-leg"></div></div></div>';
+    } else if (type === 'button') {
+      html = '<div class="component-button">' +
+        '<div class="button-cap"></div>' +
+        '<div class="button-base"></div>' +
+        '<div class="button-legs"><div class="button-leg"></div><div class="button-leg"></div></div></div>';
+    }
+
+    div.innerHTML = html;
+    return div;
+  }
+
+  // =========================================================
+  // Position a component on the protoboard
+  //
+  // Uses pure layout math to match the CSS grid exactly,
+  // avoiding getBoundingClientRect discrepancies (border vs
+  // padding box). The protoboard structure:
+  //
+  //   .protoboard [padding:8px] [border:1px]
+  //     .proto-col-labels [height:16px] [margin-bottom:3px]
+  //     .proto-grid
+  //       .proto-row
+  //         .proto-row-label [width:22px]
+  //         .proto-cell [26x26]  gap:1px
+  //
+  // Grid columns: 22px | gap1 | 26px | gap1 | 26px | …
+  // Cell (row,col) left from grid start: 22 + 1 + col*27 = 23 + col*27
+  // Cell top  from grid start:            row * 27
+  // Grid top  from protoboard padding:    16 + 3 = 19
+  // Protoboard padding:                   8
+  //
+  // → cellLeft from protoboard padding-box: 8 + 23 + col*27 = 31 + col*27
+  // → cellTop  from protoboard padding-box: 8 + 19 + row*27  = 27 + row*27
+  // =========================================================
+  function posComp(el, type, row, col) {
+    if (!dom.protoBoard) { return; }
+
+    var cell = findHoleEl(row, col);
+
+    if (!cell) {
+      var spawn = getSafeSpawnPosition(type);
+      if (dom.workspaceCanvas) {
+        var cvRect = dom.workspaceCanvas.getBoundingClientRect();
+        var pbRect = dom.protoBoard.getBoundingClientRect();
+        var relX = spawn.x - (pbRect.left - cvRect.left);
+        var relY = spawn.y - (pbRect.top - cvRect.top);
+        el.style.position = 'absolute';
+        el.style.left = relX + 'px';
+        el.style.top = relY + 'px';
+      } else {
+        el.style.position = 'absolute';
+        el.style.left = spawn.x + 'px';
+        el.style.top = spawn.y + 'px';
+      }
+      return;
+    }
+
+    // Layout-based position (padding-box relative)
+    var CELL_W = 26;
+    var CELL_GAP = 1;
+    var ROW_LABEL_W = 22;
+    var COL_LABEL_H = 16;
+    var COL_LABEL_MARGIN = 3;
+    var PROTO_PAD = 8;
+
+    // left edge of this cell from protoboard padding box
+    var x = PROTO_PAD + ROW_LABEL_W + CELL_GAP + col * (CELL_W + CELL_GAP);
+    // top edge of this cell from protoboard padding box
+    var y = PROTO_PAD + COL_LABEL_H + COL_LABEL_MARGIN + row * (CELL_W + CELL_GAP);
+
+    // Center the component body over the hole center (13px from cell left)
+    // Body widths: LED = 18px, resistor = 20px, button = 34px
+    // Center: 13 - (bodyWidth / 2)
+    if (type === 'led') {
+      x += 4;   // 13 - 9  = +4
+      y -= 12;
+    } else if (type === 'resistor') {
+      x += 3;   // 13 - 10 = +3
+      y -= 10;
+    } else if (type === 'button') {
+      x -= 4;   // 13 - 17 = -4
+      y -= 18;
+    }
+
+    el.style.position = 'absolute';
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+  }
+
+  // =========================================================
+  // Place component
+  // =========================================================
+  function placeComp(type, row, col, extra) {
+    extra = extra || {};
+    var el = makeCompEl(type, extra);
+    posComp(el, type, row, col);
+
+    el.dataset.type = type;
+    el.dataset.row = row;
+    el.dataset.col = col;
+
+    // Right-click → color picker for LED
+    if (type === 'led') {
+      el.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        showColorPicker(this, extra);
+      });
+    }
+
+    // Double-click → remove
+    el.addEventListener('dblclick', function (e) {
+      e.stopPropagation();
+      if (state.simulating) return;
+      if (confirm('Eliminar ' + compName(type) + '?')) removeComp(this);
+    });
+
+    // Tooltip
+    var tipText = compName(type) + (compValue({ type: type, extra: extra }) ? ' (' + compValue({ type: type, extra: extra }) + ')' : '');
+    addTooltip(el, tipText, row, col);
+
+    dom.protoBoard.appendChild(el);
+
+    state.components.push({ type: type, row: row, col: col, el: el, extra: extra });
+
+    // Drag-to-move: mousedown starts a potential drag
+    el.addEventListener('mousedown', function (e) {
+      if (state.simulating) return;
+      if (e.button !== 0) return; // left button only
+      e.stopPropagation();
+
+      var startX = e.clientX;
+      var startY = e.clientY;
+      var moved = false;
+      var comp = this;
+      var origRow = +comp.dataset.row;
+      var origCol = +comp.dataset.col;
+
+      // Ghost that follows the mouse
+      var ghost = document.createElement('div');
+      ghost.style.cssText = 'position:fixed;z-index:1000;pointer-events:none;opacity:0.8;' +
+        'width:80px;box-shadow:0 8px 24px rgba(0,0,0,0.2);' +
+        'background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;padding:6px 8px;' +
+        'display:flex;flex-direction:column;align-items:center;gap:4px;font-size:0.7rem;font-weight:600;';
+      ghost.textContent = compName(type);
+
+      function onMove(ev) {
+        var mx = ev.clientX;
+        var my = ev.clientY;
+        if (mx === undefined) return;
+        var dx = mx - startX;
+        var dy = my - startY;
+        if (!moved && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+          moved = true;
+          ghost.style.left = (startX - 40) + 'px';
+          ghost.style.top = (startY - 20) + 'px';
+          document.body.appendChild(ghost);
+          comp.style.opacity = '0.3';
+        }
+        if (moved) {
+          ghost.style.left = (mx - 40) + 'px';
+          ghost.style.top = (my - 20) + 'px';
+          highlightHole(mx, my);
+        }
+      }
+
+      function onUp(ev) {
+        var mx = ev.clientX;
+        var my = ev.clientY;
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        if (ghost.parentNode) ghost.remove();
+        comp.style.opacity = '';
+
+        if (moved && mx !== undefined) {
+          clearHoleHighlights();
+          var near = nearestHole(mx, my);
+          var validRow = near ? near.row : origRow;
+          var validCol = near ? near.col : origCol;
+          // Clamp column per component type
+          if (near) {
+            if (type === 'led' || type === 'resistor') {
+              validCol = near.col < 4 ? 3 : (near.col > 10 ? 3 : near.col);
+            } else if (type === 'button') {
+              validCol = near.col < 4 ? 2 : (near.col > 10 ? 2 : near.col);
+            }
+            if (validCol === GAP_COL) { validCol = type === 'button' ? 2 : 3; }
+            if (validCol < 0) validCol = 0;
+            if (validCol >= PROTO_COLS) validCol = PROTO_COLS - 1;
+          }
+          if (near) {
+            // Update component position
+            comp.dataset.row = validRow;
+            comp.dataset.col = validCol;
+            posComp(comp, type, validRow, validCol);
+            for (var i = 0; i < state.components.length; i++) {
+              if (state.components[i].el === comp) {
+                state.components[i].row = validRow;
+                state.components[i].col = validCol;
+                break;
+              }
+            }
+            updateInspector();
+            statusMsg(compName(type) + ' movido a F' + (validRow + 1) + ' C' + (validCol + 1));
+          } else {
+            // Revert to original position
+            comp.dataset.row = origRow;
+            comp.dataset.col = origCol;
+            posComp(comp, type, origRow, origCol);
+            statusMsg(compName(type) + ' devuelto a F' + (origRow + 1) + ' C' + (origCol + 1));
+          }
+        } else if (!moved) {
+          // It was a click, not a drag → select
+          selectComp(comp);
+        }
+      }
+
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+    updateInspector();
+    return el;
+  }
+
+  // =========================================================
+  // Select / Remove
+  // =========================================================
+  function selectComp(el) {
+    if (state.selectedComponent) state.selectedComponent.classList.remove('selected');
+    el.classList.add('selected');
+    state.selectedComponent = el;
+    statusMsg('Seleccionado: ' + compName(el.dataset.type) + ' (doble clic para eliminar)');
+  }
+
+  function removeComp(el) {
+    if (state.selectedComponent === el) state.selectedComponent = null;
+    state.components = state.components.filter(function (c) { return c.el !== el; });
+    if (el.parentNode) el.parentNode.removeChild(el);
+    updateInspector();
+    statusMsg('Componente eliminado');
+  }
+
+  // =========================================================
+  // LED Color Picker
+  // =========================================================
+  function showColorPicker(compEl, extra) {
+    var old = document.querySelector('.color-picker-popup');
+    if (old) old.remove();
+
+    var rect = compEl.getBoundingClientRect();
+
+    var pop = document.createElement('div');
+    pop.className = 'color-picker-popup';
+    pop.style.position = 'fixed';
+    pop.style.zIndex = '30';
+    pop.style.left = (rect.left + rect.width / 2 - 65) + 'px';
+    pop.style.top = (rect.top - 70) + 'px';
+
+    LED_COLORS.forEach(function (c) {
+      var opt = document.createElement('div');
+      opt.className = 'color-option';
+      if (c.value === (extra.color || '#ef4444')) opt.classList.add('selected');
+      opt.style.background = c.value;
+      opt.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var bulb = compEl.querySelector('.led-bulb');
+        if (bulb) {
+          bulb.style.background = c.value;
+          bulb.style.setProperty('--led-color', c.value);
+          extra.color = c.value;
+        }
+        pop.remove();
+        statusMsg('Color LED: ' + c.name);
+      });
+      pop.appendChild(opt);
+    });
+
+    document.body.appendChild(pop);
+
+    setTimeout(function () {
+      var handler = function (e) {
+        if (!pop.contains(e.target)) { pop.remove(); document.removeEventListener('click', handler); }
+      };
+      document.addEventListener('click', handler);
+    }, 0);
+  }
+
+  // =========================================================
+  // Pin/Hole Click → Wire system
+  // =========================================================
+  function onPinClick(el) {
+    if (state.simulating) return;
+    var id = el.dataset.pinId;
+    if (!id) return;
+
+    if (!state.wireSource) {
+      state.wireSource = { type: 'pin', id: id, el: el };
+      el.classList.add('active-source');
+      statusMsg('Origen: ' + id + ' — haz clic en un hueco de la protoboard');
+      return;
+    }
+
+    // Clicking same pin cancels
+    if (state.wireSource.type === 'pin' && state.wireSource.id === id) {
+      cancelWire();
+      return;
+    }
+
+    // If wireSource is a hole, complete wire to this pin
+    if (state.wireSource.type === 'hole') {
+      completeWire(state.wireSource, { type: 'pin', id: id, el: el });
+    }
+  }
+
+  function onHoleClick(cell) {
+    if (state.simulating) return;
+    var row = parseInt(cell.dataset.row, 10);
+    var col = parseInt(cell.dataset.col, 10);
+    if (isNaN(row) || isNaN(col)) return;
+
+    if (!state.wireSource) {
+      state.wireSource = { type: 'hole', row: row, col: col, el: cell };
+      cell.classList.add('active-source');
+      statusMsg('Origen: (' + (row + 1) + ',' + col + ') — haz clic en un pin o hueco');
+      return;
+    }
+
+    // Clicking same hole cancels
+    if (state.wireSource.type === 'hole' &&
+        state.wireSource.row === row && state.wireSource.col === col) {
+      cancelWire();
+      return;
+    }
+
+    // If wireSource is a pin, complete wire to this hole
+    if (state.wireSource.type === 'pin') {
+      completeWire(state.wireSource, { type: 'hole', row: row, col: col, el: cell });
+    }
+  }
+
+  function cancelWire() {
+    if (state.wireSource && state.wireSource.el) {
+      state.wireSource.el.classList.remove('active-source');
+    }
+    state.wireSource = null;
+    statusMsg('Conexión cancelada');
+  }
+
+  // =========================================================
+  // Draw wire & complete connection
+  // =========================================================
+  function completeWire(from, to) {
+    var svg = dom.wiresSvg;
+    if (!svg) { cancelWire(); return; }
+
+    var fromPos = getConnPt(from);
+    var toPos = getConnPt(to);
+    if (!fromPos || !toPos) { cancelWire(); return; }
+
+    var color = state.wireColor || '#3b82f6';
+    var path = drawWirePath(fromPos, toPos, color);
+    if (!path) { cancelWire(); return; }
+
+    if (from.el) { from.el.classList.remove('active-source'); from.el.classList.add('connected'); }
+    if (to.el) to.el.classList.add('connected');
+
+    state.wires.push({ from: from, to: to, color: color, el: path });
+    state.wireSource = null;
+    statusMsg('Cable conectado');
+  }
+
+  function getConnPt(pt) {
+    if (!dom.wiresSvg || !pt || !pt.el) return null;
+    var hole = pt.el.querySelector && pt.el.querySelector('.hole');
+    return centerRel(hole || pt.el, dom.wiresSvg);
+  }
+
+  function drawWirePath(from, to, color) {
+    var svg = dom.wiresSvg;
+    if (!svg) return null;
+
+    var dx = to.x - from.x;
+    var dy = to.y - from.y;
+    var cx1 = from.x + dx * 0.3;
+    var cy1 = from.y + dy * 0.1;
+    var cx2 = from.x + dx * 0.7;
+    var cy2 = to.y - dy * 0.1;
+
+    var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    p.setAttribute('d', 'M ' + from.x.toFixed(1) + ',' + from.y.toFixed(1) +
+      ' C ' + cx1.toFixed(1) + ',' + cy1.toFixed(1) +
+      ' ' + cx2.toFixed(1) + ',' + cy2.toFixed(1) +
+      ' ' + to.x.toFixed(1) + ',' + to.y.toFixed(1));
+    p.setAttribute('stroke', color);
+    p.setAttribute('stroke-width', '2.5');
+    p.setAttribute('fill', 'none');
+    p.setAttribute('stroke-linecap', 'round');
+    p.style.pointerEvents = 'auto';
+    p.style.cursor = 'pointer';
+    p.title = 'Cable';
+
+    p.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (state.simulating) return;
+      if (confirm('Eliminar este cable?')) {
+        if (p.parentNode) p.parentNode.removeChild(p);
+        state.wires = state.wires.filter(function (w) { return w.el !== p; });
+        statusMsg('Cable eliminado');
+      }
+    });
+
+    svg.appendChild(p);
+    return p;
+  }
+
+  // =========================================================
+  // Drag & Drop from palette
+  // =========================================================
+  function initDragDrop() {
+    var items = dom.palette.querySelectorAll('[data-component]');
+    items.forEach(function (item) {
+      item.addEventListener('mousedown', function (e) {
+        if (state.simulating) return;
+        startDrag(e, item.dataset.component);
+      });
+      item.addEventListener('touchstart', function (e) {
+        if (state.simulating) return;
+        startDrag(e, item.dataset.component);
+      }, { passive: false });
+    });
+
+    // Wire color selection
+    var wireItems = dom.palette.querySelectorAll('[data-wire-color]');
+    wireItems.forEach(function (item) {
+      item.addEventListener('click', function () {
+        if (state.simulating) return;
+        state.wireColor = this.dataset.wireColor;
+        wireItems.forEach(function (w) { w.style.borderColor = 'var(--border)'; });
+        this.style.borderColor = 'var(--primary)';
+        statusMsg('Color cable: ' + colorName(state.wireColor));
+      });
+    });
+
+    function colorName(c) {
+      return { '#ef4444': 'Rojo', '#1e293b': 'Negro', '#3b82f6': 'Azul', '#22c55e': 'Verde' }[c] || c;
+    }
+  }
+
+  function startDrag(e, type) {
+    if (state.dragActive) return;
+    state.dragActive = true;
+
+    var cx = e.clientX || (e.touches && e.touches[0].clientX);
+    var cy = e.clientY || (e.touches && e.touches[0].clientY);
+    if (cx === undefined || cy === undefined) return;
+
+    // Ghost
+    var ghost = document.createElement('div');
+    ghost.style.cssText = 'position:fixed;z-index:1000;pointer-events:none;opacity:0.85;' +
+      'width:80px;transform:scale(1.1);box-shadow:0 8px 24px rgba(0,0,0,0.2);' +
+      'background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;padding:10px 8px;' +
+      'display:flex;flex-direction:column;align-items:center;gap:6px;font-size:0.75rem;font-weight:600;';
+    ghost.textContent = compName(type) || type;
+    ghost.style.left = (cx - 40) + 'px';
+    ghost.style.top = (cy - 20) + 'px';
+    document.body.appendChild(ghost);
+
+    function move(ev) {
+      var mx = ev.clientX || (ev.touches && ev.touches[0].clientX);
+      var my = ev.clientY || (ev.touches && ev.touches[0].clientY);
+      if (mx === undefined) return;
+      ghost.style.left = (mx - 40) + 'px';
+      ghost.style.top = (my - 20) + 'px';
+      highlightHole(mx, my);
+    }
+
+    function up(ev) {
+      var mx = ev.clientX || (ev.changedTouches && ev.changedTouches[0].clientX);
+      var my = ev.clientY || (ev.changedTouches && ev.changedTouches[0].clientY);
+      ghost.remove();
+      clearHoleHighlights();
+
+      if (mx !== undefined) {
+        var near = nearestHole(mx, my);
+        if (near) {
+          dropComp(type, near.row, near.col);
+        } else {
+          // No hole nearby → use safe spawn position
+          var spawn = getSafeSpawnPosition(type);
+          // Find the nearest hole to the spawn position
+          var spawnNear = nearestHoleFromPoint(spawn.x, spawn.y);
+          if (spawnNear) {
+            dropComp(type, spawnNear.row, spawnNear.col);
+          } else {
+            // Last resort: place at row 1
+            var c = type === 'button' ? 2 : 3;
+            dropComp(type, 1, c);
+          }
+          statusMsg(compName(type) + ' colocado cerca de la protoboard');
+        }
+      }
+
+      state.dragActive = false;
+      document.removeEventListener('mousemove', move);
+      document.removeEventListener('mouseup', up);
+      document.removeEventListener('touchmove', move);
+      document.removeEventListener('touchend', up);
+    }
+
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', up);
+    document.addEventListener('touchmove', move, { passive: false });
+    document.addEventListener('touchend', up, { passive: false });
+  }
+
+  // Find nearest hole from a point expressed in canvas-relative coordinates.
+  // Converts to viewport coords by adding the canvas rect offset.
+  function nearestHoleFromPoint(canvasX, canvasY) {
+    if (!dom.workspaceCanvas) return null;
+    var canvasRect = dom.workspaceCanvas.getBoundingClientRect();
+    var vpX = canvasX + canvasRect.left;
+    var vpY = canvasY + canvasRect.top;
+    return nearestHole(vpX, vpY);
+  }
+
+  function nearestHole(cx, cy) {
+    var best = null, bestDist = Infinity;
+    dom.protoGrid.querySelectorAll('.proto-cell').forEach(function (cell) {
+      var r = cell.getBoundingClientRect();
+      var x = r.left + r.width / 2, y = r.top + r.height / 2;
+      var d = Math.sqrt((cx - x) * (cx - x) + (cy - y) * (cy - y));
+      if (d < bestDist) { bestDist = d; best = { row: +cell.dataset.row, col: +cell.dataset.col, el: cell }; }
+    });
+    return bestDist < 150 ? best : null;
+  }
+
+  function highlightHole(cx, cy) {
+    clearHoleHighlights();
+    var n = nearestHole(cx, cy);
+    if (n && n.el) n.el.classList.add('snap-active');
+  }
+
+  function clearHoleHighlights() {
+    dom.protoGrid.querySelectorAll('.snap-active').forEach(function (c) { c.classList.remove('snap-active'); });
+  }
+
+  function dropComp(type, row, col) {
+    var extra = type === 'led' ? { color: '#ef4444' } : {};
+    var c = col;
+    if (type === 'led' || type === 'resistor') {
+      c = col < 4 ? 3 : (col > 10 ? 3 : col);
+    } else if (type === 'button') {
+      c = col < 4 ? 2 : (col > 10 ? 2 : col);
+    }
+    if (c === GAP_COL) { c = type === 'button' ? 2 : 3; }
+    if (c < 0) c = 0;
+    if (c >= PROTO_COLS) c = PROTO_COLS - 1;
+    var el = placeComp(type, row, c, extra);
+    if (el) statusMsg(compName(type) + ' colocado en fila ' + (row + 1));
+  }
+
+  // =========================================================
+  // Load Example
+  // =========================================================
+  function loadExample(idx) {
+    if (state.simulating) stopSim();
+    clearCircuit();
+    var ex = examples[idx];
+    if (!ex) return;
+
+    state.currentExample = idx;
+
+    setHighlightedCode(ex.code);
+
+    // Place components
+    (ex.circuit.components || []).forEach(function (c) {
+      placeComp(c.type, c.row, c.col, c.extra || {});
+    });
+
+    // Draw wires
+    (ex.circuit.wires || []).forEach(function (w) {
+      var srcEl = findPinEl(w.from);
+      var tgtEl = findHoleEl(w.to.row, w.to.col);
+      if (!srcEl || !tgtEl || !dom.wiresSvg) return;
+
+      var sp = centerRel(srcEl, dom.wiresSvg);
+      var tp = centerRel(tgtEl.querySelector('.hole') || tgtEl, dom.wiresSvg);
+      var path = drawWirePath(sp, tp, w.color);
+      if (path) {
+        srcEl.classList.add('connected');
+        tgtEl.classList.add('connected');
+        state.wires.push({
+          from: { type: 'pin', id: w.from, el: srcEl },
+          to: { type: 'hole', row: w.to.row, col: w.to.col, el: tgtEl },
+          color: w.color, el: path,
+        });
+      }
+    });
+
+    statusMsg('Ejemplo cargado: ' + ex.name);
+  }
+
+  // =========================================================
+  // Clear Circuit
+  // =========================================================
+  function clearCircuit() {
+    if (state.simulating) stopSim();
+
+    state.components.forEach(function (c) { if (c.el && c.el.parentNode) c.el.parentNode.removeChild(c.el); });
+    state.components = [];
+
+    state.wires.forEach(function (w) { if (w.el && w.el.parentNode) w.el.parentNode.removeChild(w.el); });
+    state.wires = [];
+
+    if (dom.arduinoBoard) {
+      dom.arduinoBoard.querySelectorAll('.connected').forEach(function (p) { p.classList.remove('connected'); });
+    }
+    if (dom.protoGrid) {
+      dom.protoGrid.querySelectorAll('.connected').forEach(function (c) { c.classList.remove('connected'); });
+    }
+
+    cancelWire();
+    state.selectedComponent = null;
+    state.currentExample = null;
+    if (dom.codeDisplay) dom.codeDisplay.innerHTML = '<span class="syntax-comment">// Carga un ejemplo para ver el c\u00F3digo aqu\u00ED</span>';
+    statusMsg('Circuito limpiado');
+  }
+
+  // =========================================================
+  // Start / Stop Simulation
+  // =========================================================
+  function startSim() {
+    if (state.simulating) return;
+    var idx = state.currentExample;
+    if (idx === null || idx === undefined) { statusMsg('Carga un ejemplo primero', 'error'); return; }
+    var ex = examples[idx];
+    if (!ex) { statusMsg('Ejemplo inv\u00E1lido', 'error'); return; }
+
+    state.simulating = true;
+    dom.simBtn.textContent = '\u23F9 Detener';
+    dom.simBtn.className = 'sim-btn sim-btn-danger';
+    dom.simBtn.onclick = stopSim;
+
+    dom.palette.style.opacity = '0.5';
+    dom.palette.style.pointerEvents = 'none';
+
+    statusMsg('Simulando: ' + ex.name, 'running');
+
+    try {
+      ex.run(function () {
+        // done callback — nothing special needed
+      });
+    } catch (err) {
+      statusMsg('Error: ' + err.message, 'error');
+      stopSim();
+    }
+  }
+
+  function stopSim() {
+    state.simulating = false;
+
+    // Clear timers
+    state.simulationTimers.forEach(function (t) { clearInterval(t); clearTimeout(t); });
+    state.simulationTimers = [];
+
+    // Remove sim event listeners
+    state.simListeners.forEach(function (l) {
+      if (l.el && l.el.parentNode) l.el.removeEventListener(l.type, l.fn);
+    });
+    state.simListeners = [];
+
+    // Reset visual state
+    dom.protoBoard.querySelectorAll('.led-bulb.on').forEach(function (b) { b.classList.remove('on'); });
+    dom.protoBoard.querySelectorAll('.button-cap.pressed').forEach(function (b) { b.classList.remove('pressed'); b.style.cursor = ''; });
+
+    statusMsg('Simulaci\u00F3n detenida', 'idle');
+
+    dom.simBtn.textContent = '\u25B6 Simular';
+    dom.simBtn.className = 'sim-btn sim-btn-success';
+    dom.simBtn.onclick = startSim;
+
+    dom.palette.style.opacity = '';
+    dom.palette.style.pointerEvents = '';
+  }
+
+  // =========================================================
+  // Init
+  // =========================================================
+  function init() {
+    dom.palette = document.querySelector('.sim-palette');
+    dom.workspace = document.querySelector('.sim-workspace');
+    dom.workspaceCanvas = document.querySelector('.workspace-canvas');
+    dom.arduinoContainer = document.getElementById('arduino-container');
+    dom.protoContainer = document.getElementById('protoboard-container');
+    dom.codeDisplay = document.getElementById('code-display');
+    dom.statusMsg = document.getElementById('status-msg');
+    dom.statusDot = document.getElementById('status-dot');
+    dom.simBtn = document.getElementById('btn-simulate');
+    dom.exampleSelect = document.getElementById('example-select');
+    dom.btnClear = document.getElementById('btn-clear');
+
+    if (!dom.arduinoContainer || !dom.protoContainer || !dom.workspaceCanvas) {
+      console.error('Missing required DOM elements');
+      return;
+    }
+
+    buildArduino();
+    buildProtoboard();
+    initDragDrop();
+
+    // Default select blue wire
+    var defWire = dom.palette.querySelector('[data-wire-color="#3b82f6"]');
+    if (defWire) { defWire.style.borderColor = 'var(--primary)'; state.wireColor = '#3b82f6'; }
+
+    // Example selector
+    if (dom.exampleSelect) {
+      dom.exampleSelect.addEventListener('change', function () {
+        var v = parseInt(this.value, 10);
+        if (!isNaN(v) && v >= 0) loadExample(v);
+      });
+    }
+
+    // Simulate button — use onclick to avoid duplicate handlers
+    if (dom.simBtn) {
+      dom.simBtn.onclick = startSim;
+    }
+
+    // Clear button
+    if (dom.btnClear) {
+      dom.btnClear.addEventListener('click', clearCircuit);
+    }
+
+    // Click workspace background → deselect / cancel wire
+    dom.workspace.addEventListener('click', function () {
+      if (state.selectedComponent) {
+        state.selectedComponent.classList.remove('selected');
+        state.selectedComponent = null;
+      }
+      if (state.wireSource) cancelWire();
+      var picker = document.querySelector('.color-picker-popup');
+      if (picker) picker.remove();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        if (state.wireSource) cancelWire();
+        var picker = document.querySelector('.color-picker-popup');
+        if (picker) picker.remove();
+      }
+    });
+
+    if (dom.codeDisplay) dom.codeDisplay.innerHTML = '<span class="syntax-comment">// Carga un ejemplo para ver el c\u00F3digo aqu\u00ED</span>';
+    updateInspector();
+    statusMsg('Listo \u2014 arrastra componentes o carga un ejemplo');
+    console.log('Arduino Simulator initialized');
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();

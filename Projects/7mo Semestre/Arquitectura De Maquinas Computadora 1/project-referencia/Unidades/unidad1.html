@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unidad I - Arquitectura de Máquinas</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+  <header class="page-header">
+    <nav class="navbar">
+      <a href="../index.html" class="logo">Arquitectura de Máquinas</a>
+
+      <ul class="menu">
+        <li><a href="unidad1.html" class="active">Unidad I</a></li>
+        <li><a href="unidad2.html">Unidad II</a></li>
+        <li><a href="unidad3.html">Unidad III</a></li>
+        <li><a href="unidad4.html">Unidad IV</a></li>
+        <li><a href="unidad5.html">Unidad V</a></li>
+        <li><a href="tutoriales.html">Tutoriales</a></li>
+        <li><a href="arduino.html">Arduino</a></li>
+      </ul>
+    </nav>
+
+    <div class="page-title">
+      <span>Unidad I</span>
+      <h1>Introducción a los Microprocesadores y Microcontroladores</h1>
+      <p>
+        En esta unidad se estudian los conceptos básicos de arquitectura,
+        organización, estructura de la computadora y diferencias entre
+        microprocesador y microcontrolador.
+      </p>
+    </div>
+  </header>
+
+  <main class="section">
+
+    <article class="topic">
+      <h2>1.1 Conceptos de Arquitectura y Organización de Computadoras</h2>
+
+      <p>
+        La arquitectura de computadoras describe el diseño lógico de un sistema
+        informático. Se relaciona con los elementos visibles para el programador,
+        como el conjunto de instrucciones, los registros, los tipos de datos
+        y los modos de direccionamiento.
+      </p>
+
+      <p>
+        La organización de computadoras explica cómo se implementa físicamente
+        esa arquitectura. Incluye los componentes internos, buses, memoria,
+        señales de control, circuitos y dispositivos que permiten que el sistema
+        funcione correctamente.
+      </p>
+
+      <div class="comparison">
+        <div>
+          <h3>Arquitectura</h3>
+          <p>
+            Define qué hace la computadora desde el punto de vista lógico.
+            Ejemplo: instrucciones, registros y acceso a memoria.
+          </p>
+        </div>
+
+        <div>
+          <h3>Organización</h3>
+          <p>
+            Define cómo está construida internamente la computadora.
+            Ejemplo: buses, circuitos, memoria física y unidad de control.
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <article class="topic">
+      <h2>1.1.1 Arquitectura y Organización de Computadora</h2>
+
+      <h3>1.1.1.1 Arquitectura</h3>
+      <p>
+        La arquitectura indica la forma lógica en que la computadora interpreta
+        instrucciones y procesa información. Es el modelo que permite que el
+        software se comunique con el hardware.
+      </p>
+
+      <h3>1.1.1.2 Organización</h3>
+      <p>
+        La organización representa la forma en que los componentes se conectan
+        y trabajan internamente. Dos computadoras pueden tener la misma
+        arquitectura, pero diferente organización física.
+      </p>
+
+      <h3>1.1.1.2.1 Estructura</h3>
+      <p>
+        La estructura describe cómo están conectados los componentes principales:
+        CPU, memoria, buses, dispositivos de entrada y dispositivos de salida.
+      </p>
+
+      <h3>1.1.1.2.2 Función</h3>
+      <p>
+        La función explica qué tarea realiza cada componente. Por ejemplo,
+        la CPU procesa información, la memoria almacena datos y los periféricos
+        permiten la comunicación con el exterior.
+      </p>
+    </article>
+
+    <article class="topic">
+      <h2>1.1.2 Estructura de la Computadora</h2>
+
+      <div class="grid-3">
+        <div class="mini-card">
+          <h3>Procesamiento</h3>
+          <p>
+            Es realizado principalmente por la CPU. La CPU interpreta instrucciones,
+            ejecuta operaciones aritméticas y lógicas, y controla el flujo de datos.
+          </p>
+        </div>
+
+        <div class="mini-card">
+          <h3>Sistema de Memoria</h3>
+          <p>
+            Almacena datos e instrucciones. Incluye memoria RAM, ROM, caché
+            y almacenamiento secundario como discos duros o unidades SSD.
+          </p>
+        </div>
+
+        <div class="mini-card">
+          <h3>Sistema de Entrada y Salida</h3>
+          <p>
+            Permite la comunicación con dispositivos externos como teclado,
+            mouse, monitor, impresora, sensores y módulos electrónicos.
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <article class="topic">
+      <h2>1.2 Diferencia entre Microprocesador y Microcontrolador</h2>
+
+      <h3>1.2.1 Definición de Microprocesador</h3>
+      <p>
+        Un microprocesador es un circuito integrado que contiene la unidad central
+        de procesamiento de una computadora. Para funcionar necesita componentes
+        externos como memoria RAM, almacenamiento, puertos de entrada y salida,
+        y otros circuitos de apoyo.
+      </p>
+
+      <h3>1.2.2 Definición de Microcontrolador</h3>
+      <p>
+        Un microcontrolador es un circuito integrado que incluye CPU, memoria
+        y periféricos de entrada y salida dentro del mismo chip. Se usa mucho
+        en sistemas embebidos, automatización, robótica, electrodomésticos
+        y proyectos electrónicos.
+      </p>
+
+      <h3>1.2.3 Diferencias entre Microprocesador y Microcontrolador</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Aspecto</th>
+            <th>Microprocesador</th>
+            <th>Microcontrolador</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Componentes</td>
+            <td>Necesita memoria y periféricos externos.</td>
+            <td>Integra CPU, memoria y puertos en un solo chip.</td>
+          </tr>
+          <tr>
+            <td>Uso común</td>
+            <td>Computadoras, laptops y servidores.</td>
+            <td>Arduino, sensores, alarmas y sistemas embebidos.</td>
+          </tr>
+          <tr>
+            <td>Consumo energético</td>
+            <td>Generalmente consume más energía.</td>
+            <td>Consume menos energía.</td>
+          </tr>
+          <tr>
+            <td>Costo</td>
+            <td>Puede ser más costoso por requerir componentes externos.</td>
+            <td>Suele ser más económico para tareas específicas.</td>
+          </tr>
+        </tbody>
+      </table>
+    </article>
+
+<article class="quiz" id="quiz-unidad1">
+  <h2>Quiz de Unidad I</h2>
+  <p class="quiz-intro">
+    Responde las preguntas. Cuando termines, presiona el botón “Terminar quiz”
+    para ver tus resultados y retroalimentación.
+  </p>
+
+  <form class="quiz-form">
+
+    <input type="checkbox" id="finish-quiz" class="finish-check">
+
+    <div class="quiz-content">
+
+      <div class="question">
+        <p><strong>1.</strong> Selecciona la respuesta correcta: ¿qué estudia la arquitectura de computadoras?</p>
+
+        <label class="option wrong">
+          <input type="radio" name="u1q1">
+          La limpieza física y mantenimiento externo de la computadora.
+          <span class="result">
+            Incorrecto. Eso pertenece al mantenimiento físico, no a la arquitectura.
+          </span>
+        </label>
+
+        <label class="option correct">
+          <input type="radio" name="u1q1">
+          El diseño lógico del sistema, sus instrucciones, registros y funcionamiento.
+          <span class="result">
+            Correcto. La arquitectura describe el comportamiento lógico visible del sistema.
+          </span>
+        </label>
+
+        <label class="option wrong">
+          <input type="radio" name="u1q1">
+          El diseño visual de las ventanas y botones de una aplicación.
+          <span class="result">
+            Incorrecto. Eso corresponde al diseño de interfaz, no a arquitectura de computadoras.
+          </span>
+        </label>
+      </div>
+
+      <div class="question">
+        <p>
+          <strong>2.</strong> Verdadero o falso: la organización de computadoras explica
+          cómo se implementa físicamente una arquitectura.
+        </p>
+
+        <label class="option correct">
+          <input type="radio" name="u1q2">
+          Verdadero
+          <span class="result">
+            Correcto. La organización se relaciona con componentes físicos, buses,
+            conexiones y señales internas.
+          </span>
+        </label>
+
+        <label class="option wrong">
+          <input type="radio" name="u1q2">
+          Falso
+          <span class="result">
+            Incorrecto. La organización sí explica cómo se implementa físicamente
+            una arquitectura.
+          </span>
+        </label>
+      </div>
+
+      <div class="question">
+        <p><strong>3.</strong> Selecciona la respuesta correcta: ¿cuál es una característica del microcontrolador?</p>
+
+        <label class="option wrong">
+          <input type="radio" name="u1q3">
+          Siempre necesita memoria RAM externa para funcionar.
+          <span class="result">
+            Incorrecto. Esa característica se asocia más con el microprocesador.
+          </span>
+        </label>
+
+        <label class="option correct">
+          <input type="radio" name="u1q3">
+          Integra CPU, memoria y puertos de entrada/salida en un solo chip.
+          <span class="result">
+            Correcto. Esa es una de las principales diferencias frente al microprocesador.
+          </span>
+        </label>
+
+        <label class="option wrong">
+          <input type="radio" name="u1q3">
+          Solo sirve para ejecutar videojuegos.
+          <span class="result">
+            Incorrecto. Los microcontroladores se usan en sistemas embebidos,
+            automatización, sensores y control electrónico.
+          </span>
+        </label>
+      </div>
+
+      <div class="question fill-question">
+        <p><strong>4.</strong> Completa el concepto:</p>
+
+        <div class="fill-box">
+          <span>Microprocesador = CPU + memoria y periféricos</span>
+          <input
+            type="text"
+            class="fill-input"
+            name="u1q4"
+            placeholder="Escribe aquí"
+            autocomplete="off"
+            required
+            pattern="[Ee][Xx][Tt][Ee][Rr][Nn][Oo][Ss]"
+          >
+        </div>
+
+        <div class="fill-feedback fill-ok">
+          <p><strong>Correcto:</strong> la respuesta “externos” es adecuada.</p>
+          <p>
+            Retroalimentación: el microprocesador necesita memoria y periféricos externos
+            para formar un sistema completo.
+          </p>
+        </div>
+
+        <div class="fill-feedback fill-bad">
+          <p><strong>Incorrecto.</strong> La respuesta correcta es: <strong>externos</strong>.</p>
+          <p>
+            Retroalimentación: el microprocesador no integra todo dentro del mismo chip.
+            Necesita componentes externos para funcionar como sistema completo.
+          </p>
+        </div>
+      </div>
+
+      <div class="question fill-question">
+        <p><strong>5.</strong> Completa el concepto:</p>
+
+        <div class="fill-box">
+          <span>Microcontrolador = CPU + memoria + puertos en</span>
+          <input
+            type="text"
+            class="fill-input"
+            name="u1q5"
+            placeholder="Escribe aquí"
+            autocomplete="off"
+            required
+            pattern="[Uu][Nn][ ]+[Ss][Oo][Ll][Oo]"
+          >
+          <span>chip.</span>
+        </div>
+
+        <div class="fill-feedback fill-ok">
+          <p><strong>Correcto:</strong> la respuesta “un solo” es adecuada.</p>
+          <p>
+            Retroalimentación: el microcontrolador integra CPU, memoria y puertos
+            dentro de un mismo circuito integrado.
+          </p>
+        </div>
+
+        <div class="fill-feedback fill-bad">
+          <p><strong>Incorrecto.</strong> La respuesta correcta es: <strong>un solo</strong>.</p>
+          <p>
+            Retroalimentación: el microcontrolador se caracteriza porque integra varios
+            componentes dentro de un solo chip.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="finish-area">
+      <label for="finish-quiz" class="btn finish-btn">Terminar quiz</label>
+    </div>
+
+    <div class="quiz-finished-actions">
+      <input type="reset" value="Repetir quiz" class="btn reset-btn">
+      <a href="unidad2.html" class="btn">Avanzar a la siguiente unidad</a>
+    </div>
+
+  </form>
+</article>

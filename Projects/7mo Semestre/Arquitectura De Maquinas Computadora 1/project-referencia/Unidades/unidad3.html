@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unidad III - Programación del Microprocesador</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+  <header class="page-header">
+    <nav class="navbar">
+      <a href="../index.html" class="logo">Arquitectura de Máquinas</a>
+
+      <ul class="menu">
+        <li><a href="unidad1.html">Unidad I</a></li>
+        <li><a href="unidad2.html">Unidad II</a></li>
+        <li><a href="unidad3.html" class="active">Unidad III</a></li>
+        <li><a href="unidad4.html">Unidad IV</a></li>
+        <li><a href="unidad5.html">Unidad V</a></li>
+        <li><a href="tutoriales.html">Tutoriales</a></li>
+        <li><a href="arduino.html">Arduino</a></li>
+      </ul>
+    </nav>
+
+    <div class="page-title">
+      <span>Unidad III</span>
+      <h1>Programación del Microprocesador</h1>
+      <p>
+        En esta unidad se explica cómo se programa un microprocesador mediante
+        instrucciones de bajo nivel, registros internos y ejemplos básicos en
+        lenguaje ensamblador.
+      </p>
+    </div>
+  </header>
+
+  <main class="section">
+
+    <article class="topic">
+      <h2>Introducción a la Programación del Microprocesador</h2>
+
+      <p>
+        La programación del microprocesador consiste en escribir instrucciones
+        que la CPU puede interpretar y ejecutar. En procesadores como el 8086,
+        se puede utilizar lenguaje ensamblador para trabajar directamente con
+        registros, memoria y operaciones básicas.
+      </p>
+
+      <p>
+        El lenguaje ensamblador permite comprender cómo trabaja internamente
+        una computadora, ya que muestra operaciones de bajo nivel como mover datos,
+        sumar valores, comparar, saltar a etiquetas y controlar el flujo del programa.
+      </p>
+    </article>
+
+    <article class="topic">
+      <h2>Registros del Microprocesador</h2>
+
+      <p>
+        Los registros son pequeñas áreas de almacenamiento ubicadas dentro del
+        procesador. Son mucho más rápidos que la memoria principal y se utilizan
+        para guardar datos temporales durante la ejecución de un programa.
+      </p>
+
+      <div class="grid-3">
+        <div class="mini-card">
+          <h3>AX</h3>
+          <p>
+            Registro acumulador. Se usa frecuentemente en operaciones aritméticas.
+          </p>
+        </div>
+
+        <div class="mini-card">
+          <h3>BX</h3>
+          <p>
+            Registro base. Puede utilizarse para guardar datos o direcciones.
+          </p>
+        </div>
+
+        <div class="mini-card">
+          <h3>CX</h3>
+          <p>
+            Registro contador. Es común usarlo en ciclos o repeticiones.
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <article class="topic">
+      <h2>Instrucciones Básicas en Ensamblador</h2>
+
+      <p>
+        Las instrucciones son órdenes que el procesador ejecuta. Cada instrucción
+        realiza una operación específica sobre registros, memoria o datos.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Instrucción</th>
+            <th>Función</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>MOV</td>
+            <td>Mueve o copia un dato hacia un registro o posición de memoria.</td>
+          </tr>
+          <tr>
+            <td>ADD</td>
+            <td>Suma dos valores.</td>
+          </tr>
+          <tr>
+            <td>SUB</td>
+            <td>Resta dos valores.</td>
+          </tr>
+          <tr>
+            <td>CMP</td>
+            <td>Compara dos valores.</td>
+          </tr>
+          <tr>
+            <td>JMP</td>
+            <td>Realiza un salto hacia otra parte del programa.</td>
+          </tr>
+        </tbody>
+      </table>
+    </article>
+
+    <article class="topic">
+      <h2>Ejemplo Básico en Ensamblador 8086</h2>
+
+      <p>
+        El siguiente ejemplo coloca valores en dos registros y luego los suma.
+      </p>
+
+      <pre><code>MOV AX, 5
+MOV BX, 3
+ADD AX, BX</code></pre>
+
+      <p>
+        Primero se coloca el valor 5 en el registro AX. Luego se coloca el valor 3
+        en el registro BX. Finalmente, la instrucción ADD suma BX con AX y deja
+        el resultado almacenado en AX.
+      </p>
+    </article>
+
+    <article class="topic">
+      <h2>Importancia de Programar a Bajo Nivel</h2>
+
+      <p>
+        Programar a bajo nivel ayuda a comprender cómo se ejecutan realmente
+        las instrucciones dentro del procesador. También permite analizar el uso
+        de registros, memoria, ciclos de instrucción y operaciones internas.
+      </p>
+
+      <p>
+        Aunque actualmente se usan lenguajes de alto nivel, el ensamblador sigue
+        siendo útil para estudiar arquitectura de computadoras, optimización,
+        sistemas embebidos y funcionamiento interno de la CPU.
+      </p>
+    </article>
+
+    <article class="quiz" id="quiz-unidad3">
+      <h2>Quiz de Unidad III</h2>
+      <p class="quiz-intro">
+        Responde las preguntas. Cuando termines, presiona “Terminar quiz” para ver
+        la retroalimentación.
+      </p>
+
+      <form class="quiz-form">
+
+        <input type="checkbox" id="finish-quiz" class="finish-check">
+
+        <div class="quiz-content">
+
+          <div class="question">
+            <p><strong>1.</strong> Selecciona la respuesta correcta: ¿qué hace la instrucción MOV AX, 5?</p>
+
+            <label class="option correct">
+              <input type="radio" name="u3q1">
+              Coloca el valor 5 dentro del registro AX.
+              <span class="result">
+                Correcto. MOV se usa para mover o cargar datos en registros o memoria.
+              </span>
+            </label>
+
+            <label class="option wrong">
+              <input type="radio" name="u3q1">
+              Suma 5 al valor actual de AX.
+              <span class="result">
+                Incorrecto. Para sumar se utiliza la instrucción ADD.
+              </span>
+            </label>
+
+            <label class="option wrong">
+              <input type="radio" name="u3q1">
+              Borra completamente el registro AX.
+              <span class="result">
+                Incorrecto. MOV AX, 5 no borra el registro; coloca el valor 5 en él.
+              </span>
+            </label>
+          </div>
+
+          <div class="question">
+            <p><strong>2.</strong> Verdadero o falso: los registros están dentro del procesador.</p>
+
+            <label class="option correct">
+              <input type="radio" name="u3q2">
+              Verdadero
+              <span class="result">
+                Correcto. Los registros son pequeñas áreas internas de almacenamiento rápido.
+              </span>
+            </label>
+
+            <label class="option wrong">
+              <input type="radio" name="u3q2">
+              Falso
+              <span class="result">
+                Incorrecto. Los registros sí se encuentran dentro del procesador.
+              </span>
+            </label>
+          </div>
+
+          <div class="question">
+            <p><strong>3.</strong> Selecciona la respuesta correcta: ¿qué hace ADD AX, BX?</p>
+
+            <label class="option wrong">
+              <input type="radio" name="u3q3">
+              Copia AX dentro de BX.
+              <span class="result">
+                Incorrecto. Para copiar datos se usa MOV.
+              </span>
+            </label>
+
+            <label class="option correct">
+              <input type="radio" name="u3q3">
+              Suma el contenido de BX con AX y guarda el resultado en AX.
+              <span class="result">
+                Correcto. ADD AX, BX suma ambos registros y almacena el resultado en AX.
+              </span>
+            </label>
+
+            <label class="option wrong">
+              <input type="radio" name="u3q3">
+              Detiene la ejecución del programa.
+              <span class="result">
+                Incorrecto. ADD no detiene el programa, realiza una suma.
+              </span>
+            </label>
+          </div>
+
+          <div class="question fill-question">
+            <p><strong>4.</strong> Completa la instrucción para sumar AX y BX:</p>
+
+            <div class="fill-box">
+              <span>________ AX, BX</span>
+              <input
+                type="text"
+                class="fill-input"
+                name="u3q4"
+                placeholder="Escribe la instrucción"
+                autocomplete="off"
+                required
+                pattern="[Aa][Dd][Dd]"
+              >
+            </div>
+
+            <div class="fill-feedback fill-ok">
+              <p><strong>Correcto:</strong> la instrucción “ADD” es adecuada.</p>
+              <p>
+                Retroalimentación: ADD permite sumar dos valores. En este caso suma BX con AX.
+              </p>
+            </div>
+
+            <div class="fill-feedback fill-bad">
+              <p><strong>Incorrecto.</strong> La respuesta correcta es: <strong>ADD</strong>.</p>
+              <p>
+                Retroalimentación: MOV mueve datos, SUB resta y ADD suma. Para sumar AX y BX
+                se utiliza ADD AX, BX.
+              </p>
+            </div>
+          </div>
+
+          <div class="question fill-question">
+            <p><strong>5.</strong> Completa la instrucción para mover el valor 10 al registro AX:</p>
+
+            <div class="fill-box">
+              <span>________ AX, 10</span>
+              <input
+                type="text"
+                class="fill-input"
+                name="u3q5"
+                placeholder="Escribe la instrucción"
+                autocomplete="off"
+                required
+                pattern="[Mm][Oo][Vv]"
+              >
+            </div>
+
+            <div class="fill-feedback fill-ok">
+              <p><strong>Correcto:</strong> la instrucción “MOV” es adecuada.</p>
+              <p>
+                Retroalimentación: MOV permite cargar o copiar un dato hacia un registro.
+              </p>
+            </div>
+
+            <div class="fill-feedback fill-bad">
+              <p><strong>Incorrecto.</strong> La respuesta correcta es: <strong>MOV</strong>.</p>
+              <p>
+                Retroalimentación: para colocar un valor dentro de un registro se utiliza
+                la instrucción MOV.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="finish-area">
+          <label for="finish-quiz" class="btn finish-btn">Terminar quiz</label>
+        </div>
+
+        <div class="quiz-finished-actions">
+          <input type="reset" value="Repetir quiz" class="btn reset-btn">
+          <a href="unidad4.html" class="btn">Avanzar a la siguiente unidad</a>
+        </div>
+
+      </form>
+    </article>
+
+  </main>
+
+  <footer class="footer">
+    <p>Unidad III - Arquitectura de Máquinas</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unidad V - Programadores del Microcontrolador</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+  <header class="page-header">
+    <nav class="navbar">
+      <a href="../index.html" class="logo">Arquitectura de Máquinas</a>
+
+      <ul class="menu">
+        <li><a href="unidad1.html">Unidad I</a></li>
+        <li><a href="unidad2.html">Unidad II</a></li>
+        <li><a href="unidad3.html">Unidad III</a></li>
+        <li><a href="unidad4.html">Unidad IV</a></li>
+        <li><a href="unidad5.html" class="active">Unidad V</a></li>
+        <li><a href="tutoriales.html">Tutoriales</a></li>
+        <li><a href="arduino.html">Arduino</a></li>
+      </ul>
+    </nav>
+
+    <div class="page-title">
+      <span>Unidad V</span>
+      <h1>Programadores del Microcontrolador</h1>
+      <p>
+        En esta unidad se explica qué son los programadores de microcontroladores,
+        cómo se carga un programa y qué herramientas se utilizan para trabajar con
+        sistemas embebidos.
+      </p>
+    </div>
+  </header>
+
+  <main class="section">
+
+    <article class="topic">
+      <h2>¿Qué es un Programador de Microcontrolador?</h2>
+
+      <p>
+        Un programador de microcontrolador es una herramienta de hardware o software
+        que permite cargar instrucciones dentro de la memoria del microcontrolador.
+        Gracias a este proceso, el microcontrolador puede ejecutar un programa y controlar
+        dispositivos electrónicos.
+      </p>
+
+      <p>
+        El programador actúa como intermediario entre la computadora y el microcontrolador.
+        En algunos casos se usa un dispositivo externo USB, mientras que en plataformas como
+        Arduino el sistema de carga ya viene integrado en la placa.
+      </p>
+    </article>
+
+    <article class="topic">
+      <h2>Proceso General de Programación</h2>
+
+      <p>
+        Para programar un microcontrolador se siguen varios pasos básicos. Estos pasos permiten
+        escribir el código, convertirlo a un formato entendible por el microcontrolador y cargarlo
+        en su memoria.
+      </p>
+
+      <ol class="steps">
+        <li>Escribir el código en un entorno de desarrollo.</li>
+        <li>Compilar el programa para detectar errores y generar el archivo ejecutable.</li>
+        <li>Conectar el microcontrolador a la computadora.</li>
+        <li>Cargar el programa en la memoria del microcontrolador.</li>
+        <li>Probar el funcionamiento en el circuito real o en un simulador.</li>
+      </ol>
+    </article>
+
+    <article class="topic">
+      <h2>Herramientas Comunes para Programar Microcontroladores</h2>
+
+      <div class="grid-3">
+        <div class="mini-card">
+          <h3>Arduino IDE</h3>
+          <p>
+            Entorno sencillo para programar placas Arduino. Permite escribir,
+            compilar y cargar programas fácilmente.
+          </p>
+        </div>
+
+        <div class="mini-card">
+          <h3>Programadores USB</h3>
+          <p>
+            Dispositivos físicos que permiten grabar código directamente en un microcontrolador.
+          </p>
+        </div>
+
+        <div class="mini-card">
+          <h3>Simuladores</h3>
+          <p>
+            Herramientas que permiten probar circuitos y programas sin usar hardware físico.
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <article class="topic">
+      <h2>Importancia de Probar el Programa</h2>
+
+      <p>
+        Después de cargar un programa en el microcontrolador, es necesario verificar que funcione
+        correctamente. Las pruebas ayudan a encontrar errores de conexión, fallos de lógica,
+        problemas de alimentación o configuraciones incorrectas de los pines.
+      </p>
+
+      <p>
+        Probar el sistema permite confirmar que el microcontrolador responde como se espera
+        y que los dispositivos conectados funcionan correctamente.
+      </p>
+    </article>
+
+    <article class="topic">
+      <h2>Ejemplo Básico de Flujo de Trabajo</h2>
+
+      <p>
+        Un ejemplo común es programar una placa Arduino para encender y apagar un LED.
+        Primero se escribe el código en Arduino IDE, luego se verifica, se conecta la placa,
+        se selecciona el puerto y finalmente se carga el programa.
+      </p>
+
+      <pre><code>void setup() {
+  pinMode(13, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(13, HIGH);
+  delay(1000);
+
+  digitalWrite(13, LOW);
+  delay(1000);
+}</code></pre>
+
+      <p>
+        Este programa configura el pin 13 como salida y cambia su estado cada segundo,
+        encendiendo y apagando un LED.
+      </p>
+    </article>
+
+    <article class="quiz" id="quiz-unidad5">
+      <h2>Quiz de Unidad V</h2>
+      <p class="quiz-intro">
+        Responde las preguntas. Cuando termines, presiona “Terminar quiz” para ver
+        la retroalimentación.
+      </p>
+
+      <form class="quiz-form">
+
+        <input type="checkbox" id="finish-quiz" class="finish-check">
+
+        <div class="quiz-content">
+
+          <div class="question">
+            <p><strong>1.</strong> Selecciona la respuesta correcta: ¿para qué sirve un programador de microcontrolador?</p>
+
+            <label class="option correct">
+              <input type="radio" name="u5q1">
+              Para cargar un programa en la memoria del microcontrolador.
+              <span class="result">
+                Correcto. El programador permite grabar instrucciones en el microcontrolador.
+              </span>
+            </label>
+
+            <label class="option wrong">
+              <input type="radio" name="u5q1">
+              Para diseñar páginas web.
+              <span class="result">
+                Incorrecto. El diseño web no es función de un programador de microcontrolador.
+              </span>
+            </label>
+
+            <label class="option wrong">
+              <input type="radio" name="u5q1">
+              Para reemplazar la fuente de poder.
+              <span class="result">
+                Incorrecto. El programador no reemplaza la alimentación del circuito.
+              </span>
+            </label>
+          </div>
+
+          <div class="question">
+            <p><strong>2.</strong> Verdadero o falso: después de cargar el programa, se debe probar el circuito.</p>
+
+            <label class="option correct">
+              <input type="radio" name="u5q2">
+              Verdadero
+              <span class="result">
+                Correcto. Probar el circuito permite confirmar que el programa funciona bien.
+              </span>
+            </label>
+
+            <label class="option wrong">
+              <input type="radio" name="u5q2">
+              Falso
+              <span class="result">
+                Incorrecto. La prueba es una parte importante del proceso de programación.
+              </span>
+            </label>
+          </div>
+
+          <div class="question">
+            <p><strong>3.</strong> Selecciona la respuesta correcta: ¿qué herramienta se usa comúnmente para programar placas Arduino?</p>
+
+            <label class="option wrong">
+              <input type="radio" name="u5q3">
+              Paint
+              <span class="result">
+                Incorrecto. Paint es una herramienta de dibujo, no de programación de microcontroladores.
+              </span>
+            </label>
+
+            <label class="option correct">
+              <input type="radio" name="u5q3">
+              Arduino IDE
+              <span class="result">
+                Correcto. Arduino IDE permite escribir, compilar y cargar programas en placas Arduino.
+              </span>
+            </label>
+
+            <label class="option wrong">
+              <input type="radio" name="u5q3">
+              Un reproductor de música
+              <span class="result">
+                Incorrecto. Un reproductor de música no sirve para programar microcontroladores.
+              </span>
+            </label>
+          </div>
+
+          <div class="question fill-question">
+            <p><strong>4.</strong> Completa el concepto:</p>
+
+            <div class="fill-box">
+              <span>Antes de cargar el programa, normalmente se debe</span>
+              <input
+                type="text"
+                class="fill-input"
+                name="u5q4"
+                placeholder="Escribe aquí"
+                autocomplete="off"
+                required
+                pattern="[Cc][Oo][Mm][Pp][Ii][Ll][Aa][Rr]"
+              >
+            </div>
+
+            <div class="fill-feedback fill-ok">
+              <p><strong>Correcto:</strong> la respuesta “compilar” es adecuada.</p>
+              <p>
+                Retroalimentación: compilar permite verificar el código y generar instrucciones
+                que el microcontrolador pueda recibir.
+              </p>
+            </div>
+
+            <div class="fill-feedback fill-bad">
+              <p><strong>Incorrecto.</strong> La respuesta correcta es: <strong>compilar</strong>.</p>
+              <p>
+                Retroalimentación: antes de cargar el programa es necesario compilarlo para
+                detectar errores y prepararlo para el microcontrolador.
+              </p>
+            </div>
+          </div>
+
+          <div class="question fill-question">
+            <p><strong>5.</strong> Completa el concepto:</p>
+
+            <div class="fill-box">
+              <span>Una herramienta común para programar placas Arduino es Arduino</span>
+              <input
+                type="text"
+                class="fill-input"
+                name="u5q5"
+                placeholder="Escribe aquí"
+                autocomplete="off"
+                required
+                pattern="[Ii][Dd][Ee]"
+              >
+            </div>
+
+            <div class="fill-feedback fill-ok">
+              <p><strong>Correcto:</strong> la respuesta “IDE” es adecuada.</p>
+              <p>
+                Retroalimentación: Arduino IDE permite escribir, verificar y cargar programas
+                en placas Arduino.
+              </p>
+            </div>
+
+            <div class="fill-feedback fill-bad">
+              <p><strong>Incorrecto.</strong> La respuesta correcta es: <strong>IDE</strong>.</p>
+              <p>
+                Retroalimentación: IDE significa entorno de desarrollo integrado, usado para
+                programar y cargar código.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="finish-area">
+          <label for="finish-quiz" class="btn finish-btn">Terminar quiz</label>
+        </div>
+
+        <div class="quiz-finished-actions">
+         <input type="reset" value="Repetir quiz" class="btn reset-btn">
+         <a href="../index.html" class="btn">Volver al inicio</a>
+        </div>
+
+      </form>
+    </article>
+
+  </main>
+
+  <footer class="footer">
+    <p>Unidad V - Arquitectura de Máquinas</p>
+  </footer>
+
+</body>
+</html>

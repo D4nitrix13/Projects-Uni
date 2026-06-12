@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arduino | Arquitectura de Máquinas</title>
+  <link rel="stylesheet" href="../style.css">
+
+  <style>
+    .lab-section {
+      padding: 30px 1.5%;
+    }
+
+    .lab-section .section-title {
+      max-width: 1100px;
+      margin-bottom: 24px;
+    }
+
+    .lab-app {
+      width: 100%;
+      max-width: 1880px;
+      margin: 0 auto;
+      background: #ffffff;
+      border: 1px solid #dbeafe;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 22px 50px rgba(15, 23, 42, 0.12);
+    }
+
+    .lab-toolbar {
+      min-height: 58px;
+      background: #f8fbff;
+      border-bottom: 1px solid #dbeafe;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 12px;
+      flex-wrap: wrap;
+    }
+
+    .lab-toolbar-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      color: #0f172a;
+    }
+
+    .lab-tinkercad-badge {
+      display: grid;
+      grid-template-columns: repeat(3, 18px);
+      gap: 2px;
+      width: max-content;
+    }
+
+    .lab-tinkercad-badge span {
+      display: grid;
+      place-items: center;
+      width: 18px;
+      height: 18px;
+      background: #38bdf8;
+      color: #ffffff;
+      font-size: 0.7rem;
+      font-weight: 900;
+      border-radius: 2px;
+    }
+
+    .lab-toolbar-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .lab-inline-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f8fafc;
+      border: 1px solid #dbeafe;
+      border-radius: 12px;
+      padding: 7px 10px;
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .lab-select,
+    .lab-small-button {
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #0f172a;
+      border-radius: 10px;
+      padding: 8px 11px;
+      cursor: pointer;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 800;
+      transition: 0.25s ease;
+    }
+
+    .lab-select:hover,
+    .lab-small-button:hover {
+      background: #eff6ff;
+      border-color: #93c5fd;
+    }
+
+    .lab-small-button.danger {
+      background: #fee2e2;
+      border-color: #fecaca;
+      color: #991b1b;
+    }
+
+    .lab-small-button.danger:hover {
+      background: #fecaca;
+    }
+
+    .lab-shell {
+      display: grid;
+      grid-template-columns: 230px minmax(900px, 1fr) 315px;
+      height: 830px;
+      min-height: 830px;
+      align-items: stretch;
+    }
+
+    .lab-palette {
+      background: #f8fafc;
+      border-right: 1px solid #dbeafe;
+      padding: 15px;
+      overflow-y: auto;
+    }
+
+    .lab-palette h3,
+    .lab-code-panel h3 {
+      color: #0f172a;
+      margin-bottom: 10px;
+    }
+
+    .lab-palette p,
+    .lab-code-panel p {
+      color: #475569;
+      font-size: 0.88rem;
+      margin-bottom: 14px;
+      line-height: 1.45;
+    }
+
+    .lab-component-button {
+      width: 100%;
+      min-height: 66px;
+      border: 1px solid #dbeafe;
+      background: #ffffff;
+      border-radius: 15px;
+      margin-bottom: 11px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 11px;
+      text-align: left;
+      transition: 0.25s ease;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .lab-component-button:hover {
+      transform: translateY(-3px);
+      border-color: #60a5fa;
+      box-shadow: 0 14px 26px rgba(37, 99, 235, 0.13);
+    }
+
+    .lab-component-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #ffffff;
+      flex: 0 0 auto;
+      font-size: 0.8rem;
+    }
+
+    .lab-icon-arduino {
+      background: #0f766e;
+    }
+
+    .lab-icon-led {
+      background: #dc2626;
+    }
+
+    .lab-icon-resistor {
+      background: #ca8a04;
+    }
+
+    .lab-component-text strong {
+      display: block;
+      color: #0f172a;
+      font-size: 0.9rem;
+      line-height: 1.2;
+    }
+
+    .lab-component-text span {
+      color: #64748b;
+      font-size: 0.76rem;
+      line-height: 1.25;
+    }
+
+    .lab-help-box {
+      margin-top: 14px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 16px;
+      padding: 13px;
+      color: #1e3a8a;
+      font-size: 0.82rem;
+    }
+
+    .lab-help-box h4 {
+      color: #1e40af;
+      margin-bottom: 8px;
+    }
+
+    .lab-help-box ol {
+      padding-left: 18px;
+    }
+
+    .lab-help-box li {
+      margin-bottom: 7px;
+    }
+
+    .lab-workspace-wrap {
+      background:
+        linear-gradient(#dbeafe 1px, transparent 1px),
+        linear-gradient(90deg, #dbeafe 1px, transparent 1px);
+      background-size: 26px 26px;
+      background-color: #f8fbff;
+      position: relative;
+      overflow: hidden;
+      height: 830px;
+    }
+
+    .lab-canvas {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      background:
+        linear-gradient(#dbeafe 1px, transparent 1px),
+        linear-gradient(90deg, #dbeafe 1px, transparent 1px);
+      background-size: 26px 26px;
+      background-color: #f8fbff;
+      overflow: hidden;
+    }
+
+    .lab-empty-hint {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: min(500px, calc(100% - 40px));
+      text-align: center;
+      color: #64748b;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px dashed #93c5fd;
+      border-radius: 20px;
+      padding: 28px;
+      z-index: 1;
+      box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+    }
+
+    .lab-empty-hint strong {
+      display: block;
+      color: #0f172a;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+
+    .lab-wire-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 12;
+      pointer-events: none;
+    }
+
+    .lab-wire-path-hit {
+      pointer-events: stroke;
+      cursor: pointer;
+      fill: none;
+      stroke: transparent;
+      stroke-width: 18;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .lab-wire-path-visible {
+      fill: none;
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 2px 2px rgba(15, 23, 42, 0.2));
+    }
+
+    .lab-wire-selected .lab-wire-path-visible {
+      stroke-width: 8;
+      filter: drop-shadow(0 0 10px rgba(37, 99, 235, 0.45));
+    }
+
+    .lab-wire-end {
+      stroke: #ffffff;
+      stroke-width: 2.5;
+    }
+
+    .lab-wire-preview {
+      fill: none;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 8 8;
+      opacity: 0.75;
+      pointer-events: none;
+    }
+
+    .lab-component {
+      position: absolute;
+      z-index: 4;
+      user-select: none;
+      touch-action: none;
+      transition: filter 0.18s ease, transform 0.18s ease;
+    }
+
+    .lab-component.selected {
+      filter:
+        drop-shadow(0 0 8px rgba(37, 99, 235, 0.35))
+        drop-shadow(0 10px 20px rgba(15, 23, 42, 0.14));
+    }
+
+    .lab-component.dragging {
+      z-index: 20;
+      filter: drop-shadow(0 18px 26px rgba(15, 23, 42, 0.22));
+    }
+
+    .lab-component-header {
+      position: absolute;
+      left: 12px;
+      top: -34px;
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 900;
+      padding: 5px 9px;
+      border-radius: 8px;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: 0.2s ease;
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 30;
+    }
+
+    .lab-component:hover .lab-component-header {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .lab-port {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #0f172a;
+      background: #facc15;
+      cursor: crosshair;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      font-size: 0.52rem;
+      font-weight: 900;
+      color: #0f172a;
+      padding: 0;
+      line-height: 1;
+    }
+
+    .lab-port:hover,
+    .lab-port.selected {
+      background: #22c55e;
+      color: #ffffff;
+      box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.24);
+    }
+
+    .lab-port.ground {
+      background: #111827;
+      color: #ffffff;
+      border-color: #e5e7eb;
+    }
+
+    .lab-port.power {
+      background: #dc2626;
+      color: #ffffff;
+      border-color: #fee2e2;
+    }
+
+    /* ========================= */
+    /* ARDUINO FINAL */
+    /* ========================= */
+
+    .lab-arduino {
+      width: 380px;
+      height: 220px;
+      background:
+        radial-gradient(circle at 72% 42%, rgba(255, 255, 255, 0.16), transparent 0 70px),
+        linear-gradient(135deg, #2d8fbd 0%, #247eaa 50%, #1d6d99 100%);
+      border: 4px solid #14506f;
+      border-radius: 12px;
+      color: #ffffff;
+      box-shadow:
+        inset 0 0 0 2px rgba(255, 255, 255, 0.12),
+        inset 0 -12px 24px rgba(15, 23, 42, 0.12),
+        0 16px 30px rgba(15, 23, 42, 0.18);
+    }
+
+    .lab-arduino-usb {
+      position: absolute;
+      left: -34px;
+      top: 72px;
+      width: 36px;
+      height: 50px;
+      background: linear-gradient(180deg, #f8fafc 0%, #cbd5e1 48%, #94a3b8 100%);
+      border: 3px solid #64748b;
+      border-right: none;
+      border-radius: 8px 0 0 8px;
+      box-shadow:
+        inset 0 0 0 2px rgba(255, 255, 255, 0.28),
+        -10px 8px 18px rgba(15, 23, 42, 0.12);
+    }
+
+    .lab-arduino-usb::before {
+      content: "";
+      position: absolute;
+      left: -60px;
+      top: 8px;
+      width: 60px;
+      height: 34px;
+      background: linear-gradient(90deg, #111827 0%, #1f2937 70%, #374151 100%);
+      border-radius: 12px 0 0 12px;
+      box-shadow: inset 0 -8px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .lab-arduino-usb::after {
+      content: "";
+      position: absolute;
+      left: -94px;
+      top: 15px;
+      width: 38px;
+      height: 20px;
+      background: #111827;
+      border-radius: 16px 0 0 16px;
+    }
+
+    .lab-arduino-reset {
+      position: absolute;
+      left: 30px;
+      top: 32px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 45% 42%, #b45309 0 36%, #92400e 37% 70%, #7c2d12 71%);
+      border: 3px solid #dbeafe;
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.25);
+    }
+
+    .lab-arduino-jack {
+      position: absolute;
+      left: 24px;
+      bottom: 24px;
+      width: 54px;
+      height: 30px;
+      background: #111827;
+      border: 4px solid #020617;
+      border-radius: 8px;
+      box-shadow:
+        inset 0 -6px 0 rgba(255, 255, 255, 0.06),
+        0 4px 8px rgba(15, 23, 42, 0.18);
+    }
+
+    .lab-arduino-crystal {
+      position: absolute;
+      left: 132px;
+      top: 124px;
+      width: 48px;
+      height: 17px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #e5e7eb 0%, #94a3b8 100%);
+      border: 2px solid #cbd5e1;
+      box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.45);
+    }
+
+    .lab-board-screw {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      box-shadow: inset 0 0 0 2px rgba(15, 23, 42, 0.16);
+    }
+
+    .screw-one {
+      left: 18px;
+      top: 16px;
+    }
+
+    .screw-two {
+      right: 18px;
+      top: 16px;
+    }
+
+    .screw-three {
+      right: 18px;
+      bottom: 18px;
+    }
+
+    .lab-arduino-brand {
+      position: absolute;
+      left: 160px;
+      top: 72px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-weight: 900;
+      font-size: 0.86rem;
+      letter-spacing: 0.3px;
+      color: rgba(255, 255, 255, 0.92);
+      white-space: nowrap;
+    }
+
+    .lab-infinity {
+      display: inline-grid;
+      place-items: center;
+      width: 34px;
+      height: 20px;
+      border-radius: 999px;
+      border: 3px solid rgba(255, 255, 255, 0.9);
+      font-size: 0.9rem;
+      line-height: 1;
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
+
+    .lab-arduino-title {
+      position: absolute;
+      right: 38px;
+      top: 73px;
+      font-size: 2.05rem;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.92);
+      text-align: right;
+      width: 86px;
+    }
+
+    .lab-arduino-title small {
+      display: none;
+    }
+
+    .lab-chip {
+      position: absolute;
+      right: 48px;
+      bottom: 58px;
+      width: 150px;
+      height: 46px;
+      background: #1f2937;
+      border: 4px solid #111827;
+      border-radius: 5px;
+      color: #94a3b8;
+      display: grid;
+      place-items: center;
+      font-size: 0.68rem;
+      font-weight: 900;
+      letter-spacing: 0.2px;
+      box-shadow:
+        inset 0 3px 0 rgba(255, 255, 255, 0.08),
+        0 5px 8px rgba(15, 23, 42, 0.22);
+    }
+
+    .lab-chip::before,
+    .lab-chip::after {
+      content: "";
+      position: absolute;
+      left: -8px;
+      right: -8px;
+      height: 5px;
+      background: repeating-linear-gradient(
+        90deg,
+        #cbd5e1 0 5px,
+        transparent 5px 13px
+      );
+    }
+
+    .lab-chip::before {
+      top: -10px;
+    }
+
+    .lab-chip::after {
+      bottom: -10px;
+    }
+
+    .lab-pin-header {
+      position: absolute;
+      height: 22px;
+      background: #111827;
+      border-radius: 4px;
+      border: 3px solid #0f172a;
+      box-shadow:
+        inset 0 -3px 0 rgba(255, 255, 255, 0.08),
+        0 2px 5px rgba(15, 23, 42, 0.2);
+    }
+
+    .lab-pin-header.top {
+      right: 36px;
+      top: 18px;
+      width: 180px;
+    }
+
+    .lab-pin-header.bottom {
+      right: 36px;
+      bottom: 20px;
+      width: 180px;
+    }
+
+    .lab-power-header {
+      position: absolute;
+      left: 22px;
+      bottom: 20px;
+      width: 82px;
+      height: 22px;
+      background: #111827;
+      border-radius: 4px;
+      border: 3px solid #0f172a;
+      box-shadow:
+        inset 0 -3px 0 rgba(255, 255, 255, 0.08),
+        0 2px 5px rgba(15, 23, 42, 0.2);
+    }
+
+    .lab-arduino-pin-title {
+      position: absolute;
+      font-size: 0.66rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.9);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .top-title {
+      right: 104px;
+      top: 50px;
+    }
+
+    .bottom-title {
+      right: 75px;
+      bottom: 50px;
+      font-size: 0.6rem;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    /* ========================= */
+    /* LED */
+    /* ========================= */
+
+    .lab-led {
+      width: 142px;
+      height: 200px;
+      --led-base: #991b1b;
+      --led-border: #4c0519;
+      --led-glow: rgba(239, 68, 68, 0.9);
+    }
+
+    .lab-led-color-red {
+      --led-base: #9f1d1d;
+      --led-border: #5b0615;
+      --led-glow: rgba(239, 68, 68, 0.9);
+    }
+
+    .lab-led-color-green {
+      --led-base: #166534;
+      --led-border: #14532d;
+      --led-glow: rgba(34, 197, 94, 0.92);
+    }
+
+    .lab-led-color-orange {
+      --led-base: #b45309;
+      --led-border: #7c2d12;
+      --led-glow: rgba(249, 115, 22, 0.92);
+    }
+
+    .lab-led-color-yellow {
+      --led-base: #a16207;
+      --led-border: #854d0e;
+      --led-glow: rgba(250, 204, 21, 0.92);
+    }
+
+    .lab-led-color-purple {
+      --led-base: #6d28d9;
+      --led-border: #4c1d95;
+      --led-glow: rgba(168, 85, 247, 0.94);
+    }
+
+    .lab-led-bulb {
+      position: absolute;
+      left: 42px;
+      top: 6px;
+      width: 46px;
+      height: 64px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.28), transparent 34%), var(--led-base);
+      border: 4px solid var(--led-border);
+      border-radius: 26px 26px 14px 14px;
+      box-shadow: inset 0 -12px 18px rgba(0, 0, 0, 0.2);
+      transition: 0.2s ease;
+    }
+
+    .lab-led-flat-side {
+      position: absolute;
+      left: 86px;
+      top: 28px;
+      width: 4px;
+      height: 34px;
+      background: rgba(255,255,255,0.4);
+      border-radius: 999px;
+      opacity: 0.7;
+    }
+
+    .lab-led-bulb.on {
+      box-shadow:
+        0 0 18px var(--led-glow),
+        0 0 48px var(--led-glow),
+        inset 0 0 14px rgba(255,255,255,0.75);
+      filter: brightness(1.22);
+    }
+
+    .lab-led-leg {
+      position: absolute;
+      top: 70px;
+      width: 5px;
+      background: #94a3b8;
+      border-radius: 999px;
+    }
+
+    .lab-led-leg.long {
+      left: 52px;
+      height: 72px;
+    }
+
+    .lab-led-leg.short {
+      left: 84px;
+      height: 56px;
+    }
+
+    .lab-led-name {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 32px;
+      text-align: center;
+      color: #0f172a;
+      font-weight: 900;
+      font-size: 1rem;
+    }
+
+    .lab-led-control {
+      position: absolute;
+      left: 20px;
+      bottom: 0;
+      display: none;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.98);
+      border: 1px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 6px 8px;
+      box-shadow: 0 8px 16px rgba(15, 23, 42, 0.12);
+      z-index: 35;
+    }
+
+    .lab-component.selected.lab-led .lab-led-control {
+      display: inline-flex;
+    }
+
+    .lab-led-control span {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .lab-led-control select {
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 5px 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: #fff;
+      color: #0f172a;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    /* ========================= */
+    /* RESISTENCIA */
+    /* ========================= */
+
+    .lab-resistor {
+      width: 180px;
+      height: 80px;
+    }
+
+    .lab-resistor-line {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      top: 36px;
+      height: 5px;
+      background: linear-gradient(90deg, #64748b, #94a3b8, #64748b);
+      border-radius: 999px;
+    }
+
+    .lab-resistor-body {
+      position: absolute;
+      left: 50px;
+      top: 20px;
+      width: 80px;
+      height: 35px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #fbbf24, #d97706);
+      border: 3px solid #92400e;
+      box-shadow: inset 0 0 8px rgba(255,255,255,0.2);
+    }
+
+    .lab-resistor-body .band {
+      position: absolute;
+      top: -2px;
+      width: 8px;
+      height: 35px;
+      border-radius: 2px;
+    }
+
+    .band-one {
+      left: 17px;
+      background: #7c2d12;
+    }
+
+    .band-two {
+      left: 31px;
+      background: #dc2626;
+    }
+
+    .band-three {
+      left: 45px;
+      background: #92400e;
+    }
+
+    .band-four {
+      right: 13px;
+      background: #fef08a;
+    }
+
+    .lab-resistor-name {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      text-align: center;
+      color: #0f172a;
+      font-weight: 900;
+      font-size: 0.96rem;
+    }
+
+    .lab-code-panel {
+      background: #ffffff;
+      border-left: 1px solid #dbeafe;
+      padding: 15px;
+      overflow-y: auto;
+    }
+
+    .lab-code-panel textarea {
+      width: 100%;
+      min-height: 250px;
+      resize: vertical;
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      background: #020617;
+      color: #e0f2fe;
+      padding: 13px;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      outline: none;
+    }
+
+    .lab-code-panel textarea:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.18);
+    }
+
+    .lab-code-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-top: 12px;
+    }
+
+    .lab-run {
+      background: #16a34a;
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.86rem;
+    }
+
+    .lab-stop {
+      background: #dc2626;
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.86rem;
+    }
+
+    .lab-examples {
+      display: grid;
+      gap: 8px;
+      margin: 14px 0;
+    }
+
+    .lab-example-btn {
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1e40af;
+      padding: 10px;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: Arial, Helvetica, sans-serif;
+      text-align: left;
+      font-size: 0.78rem;
+    }
+
+    .lab-console {
+      margin-top: 14px;
+      background: #020617;
+      color: #d1fae5;
+      border-radius: 16px;
+      padding: 13px;
+      border: 1px solid #1e293b;
+    }
+
+    .lab-console h4 {
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .lab-console pre {
+      margin: 0;
+      padding: 0;
+      border: none;
+      background: transparent;
+      color: #d1fae5;
+      white-space: pre-wrap;
+      min-height: 135px;
+      font-size: 0.78rem;
+      line-height: 1.45;
+    }
+
+    .lab-status {
+      margin-top: 12px;
+      padding: 11px;
+      border-radius: 14px;
+      background: #f8fafc;
+      border: 1px solid #dbeafe;
+      color: #475569;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .lab-status.ok {
+      background: #dcfce7;
+      border-color: #86efac;
+      color: #166534;
+    }
+
+    .lab-status.error {
+      background: #fee2e2;
+      border-color: #fecaca;
+      color: #991b1b;
+    }
+
+    .lab-page-actions {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    @media (max-width: 1400px) {
+      .lab-section {
+        padding-left: 1%;
+        padding-right: 1%;
+      }
+
+      .lab-shell {
+        grid-template-columns: 215px minmax(780px, 1fr) 300px;
+      }
+
+      .lab-toolbar-title span:last-child {
+        font-size: 0.95rem;
+      }
+    }
+
+    @media (max-width: 1180px) {
+      .lab-shell {
+        grid-template-columns: 220px minmax(560px, 1fr);
+        height: auto;
+        min-height: auto;
+      }
+
+      .lab-code-panel {
+        grid-column: 1 / -1;
+        border-left: none;
+        border-top: 1px solid #dbeafe;
+      }
+
+      .lab-workspace-wrap {
+        height: 700px;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .lab-section {
+        padding: 22px 4%;
+      }
+
+      .lab-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .lab-palette {
+        border-right: none;
+        border-bottom: 1px solid #dbeafe;
+      }
+
+      .lab-workspace-wrap {
+        height: 640px;
+      }
+
+      .lab-toolbar {
+        justify-content: flex-start;
+      }
+
+      .lab-code-actions {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="page-header">
+    <nav class="navbar">
+      <a href="../index.html" class="logo">Arquitectura de Máquinas</a>
+
+      <ul class="menu">
+        <li><a href="unidad1.html">Unidad I</a></li>
+        <li><a href="unidad2.html">Unidad II</a></li>
+        <li><a href="unidad3.html">Unidad III</a></li>
+        <li><a href="unidad4.html">Unidad IV</a></li>
+        <li><a href="unidad5.html">Unidad V</a></li>
+        <li><a href="tutoriales.html">Tutoriales</a></li>
+        <li><a href="arduino.html" class="active">Arduino</a></li>
+      </ul>
+    </nav>
+
+    <section class="page-title">
+      <span>Laboratorio interactivo</span>
+      <h1>Arduino, circuitos y lógica tipo C++</h1>
+      <p>
+        Agrega componentes, muévelos en el área de trabajo, conecta cables entre pines
+        y ejecuta código estilo Arduino para observar el comportamiento del circuito.
+      </p>
+    </section>
+  </header>
+
+  <main>
+    <section class="section lab-section">
+      <div class="section-title">
+        <span>Simulador propio</span>
+        <h2>Construye y prueba un circuito Arduino</h2>
+        <p>
+          Esta sección funciona como un laboratorio básico inspirado en Tinkercad.
+          Puedes colocar una placa Arduino Uno, LEDs y resistencias. Luego puedes conectar
+          cables y escribir tu propia lógica usando instrucciones como
+          <strong>pinMode</strong>, <strong>digitalWrite</strong> y <strong>delay</strong>.
+        </p>
+      </div>
+
+      <div class="lab-app">
+        <div class="lab-toolbar">
+          <div class="lab-toolbar-title">
+            <div class="lab-tinkercad-badge" aria-hidden="true">
+              <span>T</span><span>I</span><span>N</span>
+              <span>K</span><span>E</span><span>R</span>
+            </div>
+            <span>Ejercicio Arduino - Laboratorio de circuitos</span>
+          </div>
+
+          <div class="lab-toolbar-actions">
+            <label class="lab-inline-control" for="wireColor">
+              <span>Color del cable</span>
+              <select class="lab-select" id="wireColor" aria-label="Color del cable">
+                <option value="#22c55e">Verde</option>
+                <option value="#dc2626">Rojo</option>
+                <option value="#2563eb">Azul</option>
+                <option value="#111827">Negro</option>
+              </select>
+            </label>
+
+            <button class="lab-small-button danger" id="clearCircuit" type="button">
+              Limpiar circuito
+            </button>
+          </div>
+        </div>
+
+        <div class="lab-shell">
+          <aside class="lab-palette">
+            <h3>Componentes</h3>
+            <p>
+              Presiona un componente para colocarlo en el área. Después puedes moverlo
+              arrastrándolo con el mouse.
+            </p>
+
+            <button class="lab-component-button" type="button" data-add="arduino">
+              <span class="lab-component-icon lab-icon-arduino">UNO</span>
+              <span class="lab-component-text">
+                <strong>Arduino Uno R3</strong>
+                <span>Microcontrolador principal</span>
+              </span>
+            </button>
+
+            <button class="lab-component-button" type="button" data-add="led">
+              <span class="lab-component-icon lab-icon-led">LED</span>
+              <span class="lab-component-text">
+                <strong>LED</strong>
+                <span>Salida digital visible</span>
+              </span>
+            </button>
+
+            <button class="lab-component-button" type="button" data-add="resistor">
+              <span class="lab-component-icon lab-icon-resistor">Ω</span>
+              <span class="lab-component-text">
+                <strong>Resistencia 220Ω</strong>
+                <span>Protección para el LED</span>
+              </span>
+            </button>
+
+            <div class="lab-help-box">
+              <h4>Cómo usarlo</h4>
+              <ol>
+                <li>Agrega el Arduino.</li>
+                <li>Agrega un LED y una resistencia.</li>
+                <li>Haz clic en un pin y luego en otro para crear un cable.</li>
+                <li>Mientras conectas, puedes hacer clic en el área para crear puntos de ruta.</li>
+                <li>Selecciona un LED para mostrar su selector de color.</li>
+                <li>Selecciona un cable y mueve sus puntos blancos para ajustar la ruta.</li>
+                <li>Ejecuta el código y observa si el LED enciende.</li>
+              </ol>
+            </div>
+          </aside>
+
+          <section class="lab-workspace-wrap" aria-label="Área de trabajo del circuito">
+            <div class="lab-canvas" id="labCanvas">
+              <svg class="lab-wire-layer" id="wireLayer"></svg>
+
+              <div class="lab-empty-hint" id="emptyHint">
+                <strong>Área de trabajo vacía</strong>
+                Agrega componentes desde el panel izquierdo. Después conecta cables
+                con clic en un pin y clic en otro pin.
+              </div>
+            </div>
+          </section>
+
+          <aside class="lab-code-panel">
+            <h3>Código Arduino</h3>
+            <p>
+              Puedes modificar el pin o los tiempos. La simulación interpreta
+              instrucciones básicas de Arduino.
+            </p>
+
+            <div class="lab-examples">
+              <button class="lab-example-btn" id="exampleBlink13" type="button">
+                Cargar ejemplo: LED parpadeante en pin 13
+              </button>
+
+              <button class="lab-example-btn" id="exampleBlink8" type="button">
+                Cargar ejemplo: LED parpadeante en pin 8
+              </button>
+            </div>
+
+            <textarea id="arduinoCode" spellcheck="false">void setup() {
+  pinMode(13, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(13, HIGH);
+  delay(1000);
+
+  digitalWrite(13, LOW);
+  delay(1000);
+}</textarea>
+
+            <div class="lab-code-actions">
+              <button class="lab-run" id="runSimulation" type="button">
+                ▶ Ejecutar simulación
+              </button>
+
+              <button class="lab-stop" id="stopSimulation" type="button">
+                ■ Detener
+              </button>
+            </div>
+
+            <div class="lab-status" id="labStatus">
+              Estado: esperando circuito.
+            </div>
+
+            <div class="lab-console">
+              <h4>Consola</h4>
+              <pre id="consoleOutput">Agrega componentes y conecta el circuito para comenzar.</pre>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="section-title">
+        <span>Explicación</span>
+        <h2>Relación con Arquitectura de Máquinas</h2>
+        <p>
+          Arduino representa un sistema basado en microcontrolador. El programa se carga
+          en memoria, el procesador interno ejecuta instrucciones y los pines de entrada
+          o salida permiten interactuar con componentes físicos.
+        </p>
+      </div>
+
+      <article class="topic">
+        <h2>¿Qué ocurre cuando se ejecuta el programa?</h2>
+
+        <p>
+          La función <strong>setup()</strong> se usa para configurar el hardware. Por ejemplo,
+          <strong>pinMode(13, OUTPUT)</strong> indica que el pin 13 funcionará como salida.
+        </p>
+
+        <p>
+          La función <strong>loop()</strong> se repite continuamente. Cuando se ejecuta
+          <strong>digitalWrite(13, HIGH)</strong>, el pin 13 envía una señal alta. Si el LED
+          está conectado correctamente a ese pin y a tierra, el LED se enciende.
+        </p>
+
+        <p>
+          Cuando se ejecuta <strong>digitalWrite(13, LOW)</strong>, el pin deja de entregar
+          la señal alta y el LED se apaga. La instrucción <strong>delay()</strong> controla
+          el tiempo de espera entre un estado y otro.
+        </p>
+      </article>
+
+      <article class="topic">
+        <h2>Limitación del simulador</h2>
+
+        <p>
+          Este laboratorio es una versión educativa básica. No compila C++ real como el IDE
+          de Arduino ni simula electricidad completa como Tinkercad. Sin embargo, permite
+          manipular componentes, crear cables y probar lógica básica de salida digital,
+          suficiente para demostrar microcontroladores dentro del proyecto.
+        </p>
+
+        <p>
+          Para prácticas más completas se recomienda usar <strong>Tinkercad Circuits</strong>,
+          porque permite trabajar con más componentes electrónicos, protoboard, sensores,
+          motores y una simulación más cercana a un laboratorio real.
+        </p>
+      </article>
+
+      <div class="lab-page-actions">
+        <a class="btn btn-outline-dark" href="../index.html">Volver al inicio</a>
+        <a class="btn" href="tutoriales.html">Ver tutoriales</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Proyecto Final - Arquitectura de Máquinas</p>
+  </footer>
+
+  <script src="../arduino-sim.js"></script>
+</body>
+</html>

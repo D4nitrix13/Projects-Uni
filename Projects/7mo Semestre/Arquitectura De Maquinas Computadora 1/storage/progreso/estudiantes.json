@@ -1,0 +1,117 @@
+{
+    "2023-0823I": {
+        "carnet": "2023-0823I",
+        "creado_en": "2026-05-21 02:05:11",
+        "ultimo_acceso": "2026-05-21 02:18:45",
+        "modulos_aprobados": {
+            "unidad1Quiz": {
+                "quiz_id": "unidad1Quiz",
+                "modulo": "Unidad I: Introducción a los microprocesadores y microcontroladores",
+                "puntaje": 9,
+                "aprobado_en": "2026-05-21 02:08:20",
+                "actualizado_en": "2026-05-21 02:08:20"
+            },
+            "unidad2Quiz": {
+                "quiz_id": "unidad2Quiz",
+                "modulo": "Unidad II: Arquitectura del microprocesador",
+                "puntaje": 8,
+                "aprobado_en": "2026-05-21 02:15:09",
+                "actualizado_en": "2026-05-21 02:15:09"
+            }
+        },
+        "puntajes": {
+            "unidad1Quiz": 9,
+            "unidad2Quiz": 8
+        }
+    },
+    "2024-0001A": {
+        "carnet": "2024-0001A",
+        "creado_en": "2026-05-21 02:21:33",
+        "ultimo_acceso": "2026-05-21 02:25:17",
+        "modulos_aprobados": [],
+        "puntajes": {
+            "unidad1Quiz": 4
+        }
+    },
+    "2024-0145B": {
+        "carnet": "2024-0145B",
+        "creado_en": "2026-05-21 02:32:06",
+        "ultimo_acceso": "2026-05-21 02:48:39",
+        "modulos_aprobados": {
+            "unidad1Quiz": {
+                "quiz_id": "unidad1Quiz",
+                "modulo": "Unidad I: Introducción a los microprocesadores y microcontroladores",
+                "puntaje": 10,
+                "aprobado_en": "2026-05-21 02:35:41",
+                "actualizado_en": "2026-05-21 02:35:41"
+            },
+            "unidad2Quiz": {
+                "quiz_id": "unidad2Quiz",
+                "modulo": "Unidad II: Arquitectura del microprocesador",
+                "puntaje": 9,
+                "aprobado_en": "2026-05-21 02:39:58",
+                "actualizado_en": "2026-05-21 02:39:58"
+            },
+            "unidad3Quiz": {
+                "quiz_id": "unidad3Quiz",
+                "modulo": "Unidad III: Programación del microprocesador",
+                "puntaje": 7,
+                "aprobado_en": "2026-05-21 02:45:10",
+                "actualizado_en": "2026-05-21 02:45:10"
+            }
+        },
+        "puntajes": {
+            "unidad1Quiz": 10,
+            "unidad2Quiz": 9,
+            "unidad3Quiz": 7
+        }
+    },
+    "2025-1120C": {
+        "carnet": "2025-1120C",
+        "creado_en": "2026-05-21 03:01:22",
+        "ultimo_acceso": "2026-06-08 04:29:23",
+        "modulos_aprobados": {
+            "unidad1Quiz": {
+                "quiz_id": "unidad1Quiz",
+                "modulo": "Unidad I: Introducción a los microprocesadores y microcontroladores",
+                "puntaje": 8,
+                "aprobado_en": "2026-05-21 03:05:18",
+                "actualizado_en": "2026-06-08 04:29:23"
+            },
+            "unidad2Quiz": {
+                "quiz_id": "unidad2Quiz",
+                "modulo": "Unidad II: Arquitectura del microprocesador",
+                "puntaje": 7,
+                "aprobado_en": "2026-05-21 03:12:07",
+                "actualizado_en": "2026-06-08 04:29:23"
+            },
+            "unidad3Quiz": {
+                "quiz_id": "unidad3Quiz",
+                "modulo": "Unidad III: Programación del microprocesador",
+                "puntaje": 9,
+                "aprobado_en": "2026-05-21 03:19:33",
+                "actualizado_en": "2026-06-08 04:29:23"
+            },
+            "unidad4Quiz": {
+                "quiz_id": "unidad4Quiz",
+                "modulo": "Unidad IV: Arquitectura de los microcontroladores",
+                "puntaje": 8,
+                "aprobado_en": "2026-05-21 03:26:12",
+                "actualizado_en": "2026-06-08 04:29:23"
+            }
+        },
+        "puntajes": {
+            "unidad1Quiz": 8,
+            "unidad2Quiz": 7,
+            "unidad3Quiz": 9,
+            "unidad4Quiz": 8
+        }
+    },
+    "2023-0718I": {
+        "carnet": "2023-0718I",
+        "creado_en": "2026-05-21 02:39:14",
+        "ultimo_acceso": "2026-05-21 02:39:14",
+        "modulos_aprobados": [],
+        "puntajes": []
+    }
+}

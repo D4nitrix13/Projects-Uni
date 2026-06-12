@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial de Instalación - emu8086 y Tinkercad Arduino</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+  <header class="page-header">
+    <nav class="navbar">
+      <a href="../index.html" class="logo">Arquitectura de Máquinas</a>
+
+      <ul class="menu">
+        <li><a href="unidad1.html">Unidad I</a></li>
+        <li><a href="unidad2.html">Unidad II</a></li>
+        <li><a href="unidad3.html">Unidad III</a></li>
+        <li><a href="unidad4.html">Unidad IV</a></li>
+        <li><a href="unidad5.html">Unidad V</a></li>
+        <li><a href="tutoriales.html" class="active">Tutoriales</a></li>
+        <li><a href="arduino.html">Arduino</a></li>
+      </ul>
+    </nav>
+
+    <div class="page-title">
+      <span>Tutorial de instalación</span>
+      <h1>Instalación de emu8086 y Uso de Tinkercad con Arduino</h1>
+      <p>
+        En esta sección aprenderás cómo instalar y utilizar emu8086 para practicar
+        programación en ensamblador, y cómo usar Tinkercad Circuits para simular
+        proyectos básicos con Arduino.
+      </p>
+    </div>
+  </header>
+
+  <main class="section">
+
+    <article class="topic">
+      <h2>Tutorial 1: Instalación de emu8086</h2>
+
+      <p>
+        emu8086 es un emulador utilizado para escribir, compilar y ejecutar programas
+        en lenguaje ensamblador para el microprocesador 8086. Es útil para aprender
+        cómo funcionan los registros, instrucciones y operaciones básicas de bajo nivel.
+      </p>
+
+      <h3>¿Para qué sirve emu8086?</h3>
+      <p>
+        Sirve para practicar instrucciones como <strong>MOV</strong>, <strong>ADD</strong>,
+        <strong>SUB</strong>, <strong>CMP</strong> y <strong>JMP</strong>. También permite
+        observar cómo cambian los registros internos del procesador durante la ejecución
+        de un programa.
+      </p>
+
+      <div class="download-box">
+        <h3>Descargar emu8086</h3>
+        <p>
+          Para realizar la práctica, puedes descargar el archivo comprimido de emu8086
+          desde la carpeta de Google Drive preparada para este proyecto.
+        </p>
+
+        <a
+          class="btn"
+          href="https://drive.google.com/drive/folders/1z54lgyUe0Kf97T82rhj2Vsprl3Y5jOmM?usp=drive_link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Descargar emu8086 desde Google Drive
+        </a>
+
+        <p class="note">
+          Nota: después de descargar el archivo comprimido, debes extraerlo antes de ejecutar
+          el instalador.
+        </p>
+      </div>
+
+      <h3>Pasos para instalar emu8086</h3>
+
+      <ol class="steps">
+        <li>
+          Entra al enlace de Google Drive y descarga el archivo comprimido de emu8086.
+        </li>
+
+        <li>
+          Espera a que finalice la descarga del archivo.
+        </li>
+
+        <li>
+          Busca el archivo comprimido en la carpeta de descargas de tu computadora.
+        </li>
+
+        <li>
+          Haz clic derecho sobre el archivo y selecciona la opción para extraerlo.
+        </li>
+
+        <li>
+          Abre la carpeta extraída.
+        </li>
+
+        <li>
+          Ejecuta el instalador de emu8086.
+        </li>
+
+        <li>
+          Acepta los términos de instalación si el programa los solicita.
+        </li>
+
+        <li>
+          Selecciona la carpeta donde se instalará el programa.
+        </li>
+
+        <li>
+          Espera a que finalice el proceso de instalación.
+        </li>
+
+        <li>
+          Abre emu8086 desde el acceso directo del escritorio o desde el menú de inicio.
+        </li>
+      </ol>
+
+      <div class="comparison">
+        <div>
+          <h3>Recomendación</h3>
+          <p>
+            Guarda el archivo comprimido en una carpeta fácil de encontrar para evitar
+            problemas al momento de instalarlo.
+          </p>
+        </div>
+
+        <div>
+          <h3>Precaución</h3>
+          <p>
+            Antes de ejecutar cualquier instalador, verifica que el archivo se haya descargado
+            correctamente y que provenga del enlace indicado para la clase.
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <article class="topic">
+      <h2>Cómo usar emu8086</h2>
+
+      <p>
+        Después de instalar emu8086, puedes crear un programa básico en ensamblador
+        para observar cómo se ejecutan las instrucciones dentro del microprocesador.
+      </p>
+
+      <h3>Pasos para crear un programa</h3>
+
+      <ol class="steps">
+        <li>Abrir el programa emu8086.</li>
+        <li>Seleccionar la opción para crear un nuevo archivo.</li>
+        <li>Elegir una plantilla vacía o un ejemplo básico.</li>
+        <li>Escribir las instrucciones en lenguaje ensamblador.</li>
+        <li>Compilar el programa para verificar errores.</li>
+        <li>Ejecutar el programa completo o paso a paso.</li>
+        <li>Observar los cambios en los registros como AX, BX, CX y DX.</li>
+      </ol>
+
+      <h3>Ejemplo básico en emu8086</h3>
+
+      <pre><code>MOV AX, 5
+MOV BX, 3
+ADD AX, BX</code></pre>
+
+      <p>
+        En este ejemplo, primero se guarda el número 5 en el registro AX.
+        Luego se guarda el número 3 en el registro BX. Finalmente, la instrucción
+        <strong>ADD AX, BX</strong> suma ambos valores y deja el resultado dentro de AX.
+      </p>
+
+      <h3>Explicación del código</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Instrucción</th>
+            <th>Función</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>MOV AX, 5</td>
+            <td>Coloca el valor 5 en el registro AX.</td>
+          </tr>
+          <tr>
+            <td>MOV BX, 3</td>
+            <td>Coloca el valor 3 en el registro BX.</td>
+          </tr>
+          <tr>
+            <td>ADD AX, BX</td>
+            <td>Suma AX con BX y guarda el resultado en AX.</td>
+          </tr>
+        </tbody>
+      </table>
+    </article>
+
+    <article class="topic">
+      <h2>Tutorial 2: Uso de Tinkercad Circuits con Arduino</h2>
+
+      <p>
+        Tinkercad Circuits es una herramienta en línea que permite crear circuitos
+        electrónicos y simular su funcionamiento. Es muy útil para practicar con Arduino
+        sin necesidad de tener una placa física.
+      </p>
+
+      <h3>¿Qué se puede hacer con Tinkercad?</h3>
+
+      <div class="grid-3">
+        <div class="mini-card">
+          <h3>Crear circuitos</h3>
+          <p>
+            Puedes arrastrar componentes como resistencias, LEDs, cables,
+            protoboards y placas Arduino.
+          </p>
+        </div>
+
+        <div class="mini-card">
+          <h3>Programar Arduino</h3>
+          <p>
+            Puedes escribir código para controlar los pines de Arduino y simular
+            su comportamiento.
+          </p>
+        </div>
+
+        <div class="mini-card">
+          <h3>Simular proyectos</h3>
+          <p>
+            Puedes iniciar una simulación para comprobar si el circuito y el código
+            funcionan correctamente.
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <article class="topic">
+      <h2>Pasos para usar Tinkercad con Arduino</h2>
+
+      <ol class="steps">
+        <li>
+          Entra a la página oficial de Tinkercad desde el navegador.
+        </li>
+
+        <li>
+          Crea una cuenta o inicia sesión con una cuenta existente.
+        </li>
+
+        <li>
+          Busca el apartado llamado <strong>Circuits</strong> o <strong>Circuitos</strong>.
+        </li>
+
+        <li>
+          Selecciona la opción <strong>Create new Circuit</strong> o
+          <strong>Crear nuevo circuito</strong>.
+        </li>
+
+        <li>
+          En la lista de componentes, busca <strong>Arduino Uno R3</strong>.
+        </li>
+
+        <li>
+          Arrastra el Arduino al área de trabajo.
+        </li>
+
+        <li>
+          Agrega los componentes necesarios, por ejemplo un LED y una resistencia.
+        </li>
+
+        <li>
+          Conecta los componentes usando cables virtuales.
+        </li>
+
+        <li>
+          Abre el editor de código.
+        </li>
+
+        <li>
+          Escribe o pega el código del proyecto.
+        </li>
+
+        <li>
+          Presiona <strong>Start Simulation</strong> para probar el funcionamiento.
+        </li>
+      </ol>
+    </article>
+
+    <article class="topic">
+      <h2>Ejemplo: Encender y apagar un LED con Arduino</h2>
+
+      <p>
+        Este ejemplo simula el parpadeo de un LED conectado al pin 13 de Arduino.
+        Es uno de los ejercicios más básicos para comprender salidas digitales.
+      </p>
+
+      <h3>Componentes necesarios en Tinkercad</h3>
+
+      <ul class="list">
+        <li>1 Arduino Uno R3.</li>
+        <li>1 LED.</li>
+        <li>1 resistencia.</li>
+        <li>Cables de conexión.</li>
+        <li>Opcionalmente, una protoboard.</li>
+      </ul>
+
+      <h3>Conexión básica</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Componente</th>
+            <th>Conexión</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Pin positivo del LED</td>
+            <td>Conectado al pin digital 13 mediante una resistencia.</td>
+          </tr>
+          <tr>
+            <td>Pin negativo del LED</td>
+            <td>Conectado a GND.</td>
+          </tr>
+          <tr>
+            <td>Arduino</td>
+            <td>Controla el encendido y apagado del LED.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Código de Arduino</h3>
+
+      <pre><code>void setup() {
+  pinMode(13, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(13, HIGH);
+  delay(1000);
+
+  digitalWrite(13, LOW);
+  delay(1000);
+}</code></pre>
+
+      <h3>Explicación del código</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Línea</th>
+            <th>Explicación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>pinMode(13, OUTPUT);</td>
+            <td>Configura el pin 13 como salida.</td>
+          </tr>
+          <tr>
+            <td>digitalWrite(13, HIGH);</td>
+            <td>Envía una señal alta al pin 13 y enciende el LED.</td>
+          </tr>
+          <tr>
+            <td>delay(1000);</td>
+            <td>Espera un segundo.</td>
+          </tr>
+          <tr>
+            <td>digitalWrite(13, LOW);</td>
+            <td>Apaga el LED.</td>
+          </tr>
+        </tbody>
+      </table>
+    </article>
+
+    <article class="topic">
+      <h2>¿Cómo funciona la simulación?</h2>
+
+      <p>
+        La simulación permite probar el circuito como si estuviera armado físicamente.
+        Cuando se presiona el botón de iniciar simulación, Tinkercad ejecuta el código
+        de Arduino y muestra el comportamiento de los componentes conectados.
+      </p>
+
+      <p>
+        Si el código está correcto y las conexiones están bien hechas, el LED se encenderá
+        y apagará cada segundo. Si algo falla, se debe revisar el código, los pines,
+        la polaridad del LED y la conexión a tierra.
+      </p>
+
+      <div class="comparison">
+        <div>
+          <h3>Ventaja</h3>
+          <p>
+            Puedes practicar sin tener componentes físicos y corregir errores antes
+            de construir el circuito real.
+          </p>
+        </div>
+
+        <div>
+          <h3>Limitación</h3>
+          <p>
+            Aunque la simulación ayuda mucho, un circuito real puede tener errores físicos
+            como cables dañados, mala conexión o problemas de alimentación.
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <article class="quiz" id="quiz-tutoriales">
+      <h2>Quiz de Tutoriales</h2>
+      <p class="quiz-intro">
+        Responde las preguntas. Cuando termines, presiona “Terminar quiz” para ver
+        la retroalimentación.
+      </p>
+
+      <form class="quiz-form">
+
+        <input type="checkbox" id="finish-quiz" class="finish-check">
+
+        <div class="quiz-content">
+
+          <div class="question">
+            <p><strong>1.</strong> Selecciona la respuesta correcta: ¿para qué sirve emu8086?</p>
+
+            <label class="option correct">
+              <input type="radio" name="tq1">
+              Para escribir, compilar y ejecutar programas en ensamblador 8086.
+              <span class="result">
+                Correcto. emu8086 permite practicar programación de bajo nivel.
+              </span>
+            </label>
+
+            <label class="option wrong">
+              <input type="radio" name="tq1">
+              Para editar imágenes y videos.
+              <span class="result">
+                Incorrecto. emu8086 no es una herramienta de edición multimedia.
+              </span>
+            </label>
+
+            <label class="option wrong">
+              <input type="radio" name="tq1">
+              Para crear documentos de texto.
+              <span class="result">
+                Incorrecto. Su función principal es emular programación en ensamblador.
+              </span>
+            </label>
+          </div>
+
+          <div class="question">
+            <p><strong>2.</strong> Verdadero o falso: Tinkercad permite simular circuitos con Arduino.</p>
+
+            <label class="option correct">
+              <input type="radio" name="tq2">
+              Verdadero
+              <span class="result">
+                Correcto. Tinkercad Circuits permite simular proyectos electrónicos con Arduino.
+              </span>
+            </label>
+
+            <label class="option wrong">
+              <input type="radio" name="tq2">
+              Falso
+              <span class="result">
+                Incorrecto. Sí permite simular circuitos y código de Arduino.
+              </span>
+            </label>
+          </div>
+
+          <div class="question">
+            <p><strong>3.</strong> Selecciona la respuesta correcta: ¿qué hace digitalWrite(13, HIGH)?</p>
+
+            <label class="option wrong">
+              <input type="radio" name="tq3">
+              Borra el programa de Arduino.
+              <span class="result">
+                Incorrecto. Esa instrucción no borra el programa.
+              </span>
+            </label>
+
+            <label class="option correct">
+              <input type="radio" name="tq3">
+              Envía una señal alta al pin 13.
+              <span class="result">
+                Correcto. HIGH activa el pin digital indicado.
+              </span>
+            </label>
+
+            <label class="option wrong">
+              <input type="radio" name="tq3">
+              Cambia el nombre del circuito.
+              <span class="result">
+                Incorrecto. No tiene relación con el nombre del circuito.
+              </span>
+            </label>
+          </div>
+
+          <div class="question fill-question">
+            <p><strong>4.</strong> Completa el concepto:</p>
+
+            <div class="fill-box">
+              <span>La instrucción para configurar un pin como salida es</span>
+              <input
+                type="text"
+                class="fill-input"
+                name="tq4"
+                placeholder="Escribe aquí"
+                autocomplete="off"
+                required
+                pattern="[Pp][Ii][Nn][Mm][Oo][Dd][Ee]"
+              >
+            </div>
+
+            <div class="fill-feedback fill-ok">
+              <p><strong>Correcto:</strong> la respuesta “pinMode” es adecuada.</p>
+              <p>
+                Retroalimentación: pinMode permite definir si un pin funcionará como entrada
+                o salida.
+              </p>
+            </div>
+
+            <div class="fill-feedback fill-bad">
+              <p><strong>Incorrecto.</strong> La respuesta correcta es: <strong>pinMode</strong>.</p>
+              <p>
+                Retroalimentación: pinMode se usa dentro de setup para configurar el modo
+                de trabajo de un pin.
+              </p>
+            </div>
+          </div>
+
+          <div class="question fill-question">
+            <p><strong>5.</strong> Completa el concepto:</p>
+
+            <div class="fill-box">
+              <span>El botón que permite probar el circuito en Tinkercad se llama Start</span>
+              <input
+                type="text"
+                class="fill-input"
+                name="tq5"
+                placeholder="Escribe aquí"
+                autocomplete="off"
+                required
+                pattern="[Ss][Ii][Mm][Uu][Ll][Aa][Tt][Ii][Oo][Nn]"
+              >
+            </div>
+
+            <div class="fill-feedback fill-ok">
+              <p><strong>Correcto:</strong> la respuesta “Simulation” es adecuada.</p>
+              <p>
+                Retroalimentación: Start Simulation inicia la ejecución del circuito virtual.
+              </p>
+            </div>
+
+            <div class="fill-feedback fill-bad">
+              <p><strong>Incorrecto.</strong> La respuesta correcta es: <strong>Simulation</strong>.</p>
+              <p>
+                Retroalimentación: en Tinkercad se usa Start Simulation para iniciar la prueba
+                del circuito.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="finish-area">
+          <label for="finish-quiz" class="btn finish-btn">Terminar quiz</label>
+        </div>
+
+        <div class="quiz-finished-actions">
+          <input type="reset" value="Repetir quiz" class="btn reset-btn">
+          <a href="../index.html" class="btn">Volver al inicio</a>
+        </div>
+
+      </form>
+    </article>
+
+  </main>
+
+  <footer class="footer">
+    <p>Tutorial de instalación - Arquitectura de Máquinas</p>
+  </footer>
+
+</body>
+</html>

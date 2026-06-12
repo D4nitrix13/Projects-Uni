@@ -1,0 +1,1416 @@
+/* =========================================================
+   Arduino Simulator - Style Sheet
+   ========================================================= */
+
+:root {
+  --bg-dark: #0f172a;
+  --bg-toolbar: #1e293b;
+  --bg-workspace: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-arduino: #1a6b3c;
+  --bg-arduino-dark: #145a30;
+  --bg-proto: #faf9f6;
+  --text-primary: #1f2937;
+  --text-secondary: #64748b;
+  --text-light: #94a3b8;
+  --text-white: #ffffff;
+  --border: #e2e8f0;
+  --border-dark: #334155;
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --danger: #ef4444;
+  --danger-hover: #dc2626;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+  --transition: 0.2s ease;
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   Toolbar (standalone version only)
+   ========================================================= */
+
+.sim-toolbar {
+  background: var(--bg-dark);
+  color: var(--text-white);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border-dark);
+  flex-shrink: 0;
+  min-height: 52px;
+}
+
+.sim-toolbar .brand {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-right: 12px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sim-toolbar .brand small {
+  font-weight: 400;
+  color: var(--text-light);
+  font-size: 0.7rem;
+}
+
+.toolbar-group {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 28px;
+  background: var(--border-dark);
+  margin: 0 4px;
+}
+
+.sim-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  background: transparent;
+  color: #cbd5e1;
+  white-space: nowrap;
+}
+
+.sim-btn:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-white);
+}
+
+.sim-btn-primary {
+  background: var(--primary);
+  color: var(--text-white);
+}
+
+.sim-btn-primary:hover {
+  background: var(--primary-hover);
+  color: var(--text-white);
+}
+
+.sim-btn-success {
+  background: #16a34a;
+  color: var(--text-white);
+}
+
+.sim-btn-success:hover {
+  background: #15803d;
+  color: var(--text-white);
+}
+
+.sim-btn-danger {
+  background: var(--danger);
+  color: var(--text-white);
+}
+
+.sim-btn-danger:hover {
+  background: var(--danger-hover);
+  color: var(--text-white);
+}
+
+.sim-btn-warning {
+  background: #d97706;
+  color: var(--text-white);
+}
+
+.sim-btn-warning:hover {
+  background: #b45309;
+  color: var(--text-white);
+}
+
+.sim-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sim-select {
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-dark);
+  background: #0f172a;
+  color: #cbd5e1;
+  font-size: 0.82rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.sim-select:focus {
+  border-color: var(--primary);
+}
+
+/* =========================================================
+   Sub-toolbar (controls below site navbar)
+   ========================================================= */
+
+.sim-subtoolbar {
+  background: #1e293b;
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #334155;
+  flex-shrink: 0;
+}
+
+.sim-subtoolbar .subtoolbar-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  white-space: nowrap;
+  margin-right: 4px;
+}
+
+/* =========================================================
+   Main layout
+   ========================================================= */
+
+.sim-main {
+  display: flex;
+  min-height: calc(100vh - 120px);
+  overflow: hidden;
+}
+
+/* In standalone pages (body has flex column), sim-main fills remaining space */
+body.sim-body .sim-main {
+  flex: 1;
+  min-height: 0;
+}
+
+.sim-main .sim-palette,
+.sim-main .sim-code-panel {
+  overflow-y: auto;
+}
+
+.sim-main .sim-workspace {
+  overflow: auto;
+}
+
+/* =========================================================
+   Palette (left panel)
+   ========================================================= */
+
+.sim-palette {
+  width: 160px;
+  background: var(--bg-card);
+  border-right: 1px solid var(--border);
+  padding: 12px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+}
+
+.palette-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+
+.palette-item {
+  background: var(--bg-workspace);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 8px;
+  cursor: grab;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.palette-item:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-sm);
+  background: #eff6ff;
+}
+
+.palette-item:active {
+  cursor: grabbing;
+}
+
+.palette-item.dragging {
+  opacity: 0.4;
+}
+
+.palette-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+}
+
+/* Palette component previews */
+.palette-led {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 5px rgba(239,68,68,0.4);
+  border: 2px solid #dc2626;
+}
+
+.palette-led::after {
+  content: '';
+  display: block;
+  width: 2px;
+  height: 14px;
+  background: #94a3b8;
+  margin: 22px auto 0;
+}
+
+.palette-resistor {
+  width: 28px;
+  height: 12px;
+  background: #fbbf24;
+  border-radius: 2px;
+  position: relative;
+}
+
+.palette-resistor::before,
+.palette-resistor::after {
+  content: '';
+  display: block;
+  width: 2px;
+  height: 16px;
+  background: #94a3b8;
+  position: absolute;
+  top: -2px;
+}
+
+.palette-resistor::before { left: -2px; }
+.palette-resistor::after { right: -2px; }
+
+.palette-resistor .bands {
+  display: flex;
+  gap: 2px;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.palette-resistor .bands span {
+  width: 3px;
+  height: 8px;
+  border-radius: 1px;
+}
+
+.palette-button {
+  width: 24px;
+  height: 16px;
+  background: #475569;
+  border-radius: 3px;
+  position: relative;
+  box-shadow: 0 2px 0 #1e293b;
+}
+
+.palette-button::before,
+.palette-button::after {
+  content: '';
+  display: block;
+  width: 2px;
+  height: 8px;
+  background: #94a3b8;
+  position: absolute;
+  bottom: -8px;
+}
+
+.palette-button::before { left: 6px; }
+.palette-button::after { right: 6px; }
+
+.palette-wire {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.wire-swatch {
+  width: 20px;
+  height: 4px;
+  border-radius: 2px;
+}
+
+.wire-swatch.red { background: #ef4444; }
+.wire-swatch.black { background: #1e293b; }
+.wire-swatch.blue { background: #3b82f6; }
+.wire-swatch.green { background: #22c55e; }
+
+.palette-wire-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  width: 100%;
+}
+
+.palette-wire-options .palette-item {
+  padding: 6px;
+  font-size: 0.65rem;
+}
+
+/* =========================================================
+   Workspace (center)
+   ========================================================= */
+
+.sim-workspace {
+  flex: 1;
+  overflow: auto;
+  padding: 20px;
+  background: var(--bg-workspace);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  min-width: 0;
+}
+
+.workspace-canvas {
+  position: relative;
+  display: inline-block;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: 20px 24px;
+  border: 1px solid var(--border);
+}
+
+/* =========================================================
+   Arduino UNO R3
+   ========================================================= */
+
+.arduino-board {
+  background: var(--bg-arduino);
+  border: 2px solid var(--bg-arduino-dark);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px 44px;
+  position: relative;
+  width: 640px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+.arduino-board::before {
+  content: 'ARDUINO';
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Courier New', monospace;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.3em;
+}
+
+.arduino-board::after {
+  content: 'UNO';
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Courier New', monospace;
+  font-size: 0.5rem;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.2em;
+}
+
+.arduino-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.arduino-usb {
+  background: #94a3b8;
+  border: 1px solid #64748b;
+  border-radius: 3px;
+  padding: 2px 6px;
+  font-size: 0.55rem;
+  color: #1e293b;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+}
+
+.arduino-power {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.power-jack {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #1e293b;
+  border: 2px solid #475569;
+}
+
+.arduino-chip {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.chip-body {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 3px;
+  padding: 6px 20px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.55rem;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+.chip-body small {
+  display: block;
+  font-size: 0.45rem;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.arduino-pins {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  gap: 4px;
+}
+
+.pin-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.pin-group-label {
+  font-size: 0.5rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pin-row {
+  display: flex;
+  gap: 2px;
+}
+
+.arduino-pin {
+  width: 22px;
+  height: 14px;
+  background: #94a3b8;
+  border: 1px solid #64748b;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.5rem;
+  color: #1e293b;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.arduino-pin:hover {
+  background: #60a5fa;
+  border-color: #3b82f6;
+  transform: scale(1.1);
+  z-index: 2;
+}
+
+.arduino-pin.active-source {
+  background: #f59e0b;
+  border-color: #d97706;
+  box-shadow: 0 0 6px rgba(245,158,11,0.5);
+}
+
+.arduino-pin.connected {
+  background: #22c55e;
+  border-color: #16a34a;
+}
+
+.arduino-pin .pin-label {
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.45rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  white-space: nowrap;
+}
+
+.arduino-pin-label {
+  font-size: 0.5rem;
+  color: rgba(255,255,255,0.6);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* =========================================================
+   Protoboard
+   ========================================================= */
+
+.protoboard {
+  background: var(--bg-proto);
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  margin-top: 40px;
+  position: relative;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.8);
+}
+
+.protoboard-label {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.proto-grid {
+  display: grid;
+  gap: 1px;
+  position: relative;
+}
+
+.proto-row {
+  display: grid;
+  grid-template-columns: 22px repeat(15, 26px);
+  gap: 1px;
+}
+
+.proto-row-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--text-light);
+  height: 26px;
+}
+
+.proto-col-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: var(--text-light);
+  height: 16px;
+  width: 26px;
+  text-transform: uppercase;
+}
+
+.proto-col-labels {
+  display: grid;
+  grid-template-columns: 22px repeat(15, 26px);
+  gap: 1px;
+  margin-bottom: 3px;
+}
+
+.proto-cell {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  border-radius: 1px;
+}
+
+.proto-cell .hole {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #cbd5e1;
+  border: 1px solid #94a3b8;
+  transition: var(--transition);
+}
+
+.proto-cell:hover .hole {
+  background: #60a5fa;
+  border-color: #3b82f6;
+  transform: scale(1.3);
+}
+
+.proto-cell.snap-active .hole {
+  background: #fbbf24;
+  border-color: #f59e0b;
+  transform: scale(1.4);
+  box-shadow: 0 0 8px rgba(251,191,36,0.4);
+}
+
+.proto-cell.connected .hole {
+  background: #22c55e;
+  border-color: #16a34a;
+}
+
+.proto-cell .rail-label {
+  font-size: 0.45rem;
+  font-weight: 700;
+  color: transparent;
+  position: absolute;
+}
+
+.proto-cell.rail-positive .hole {
+  border-color: #ef4444;
+  background: #fecaca;
+}
+
+.proto-cell.rail-negative .hole {
+  border-color: #1e293b;
+  background: #cbd5e1;
+}
+
+.proto-cell.rail-positive:hover .hole {
+  background: #fca5a5;
+}
+
+.proto-cell.rail-negative:hover .hole {
+  background: #94a3b8;
+}
+
+.proto-gap {
+  width: 26px;
+  height: 26px;
+  position: relative;
+}
+
+.proto-gap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 100%;
+  background: #e2e8f0;
+}
+
+/* =========================================================
+   SVG Wires overlay
+   ========================================================= */
+
+.wires-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.wires-svg line,
+.wires-svg path {
+  pointer-events: stroke;
+  cursor: pointer;
+}
+
+.wires-svg line:hover,
+.wires-svg path:hover {
+  stroke-width: 4;
+}
+
+.wire-temp {
+  stroke-dasharray: 5,3;
+  opacity: 0.7;
+}
+
+/* =========================================================
+   Components placed on protoboard
+   ========================================================= */
+
+.component {
+  position: absolute;
+  z-index: 5;
+  cursor: pointer;
+  pointer-events: auto;
+  height: 27px;
+  overflow: visible;
+}
+
+.component.selected {
+  outline: 2px dashed var(--primary);
+  outline-offset: 2px;
+}
+
+.component .comp-coord {
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.5rem;
+  color: #64748b;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ── LED Component ── */
+
+.led-bulb {
+  position: absolute;
+  left: 50%;
+  top: -6px;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #475569;
+  transition: box-shadow 0.15s;
+  z-index: 3;
+}
+.led-bulb::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  width: 5px;
+  height: 3px;
+  background: rgba(255,255,255,0.45);
+  border-radius: 50%;
+  transform: rotate(-30deg);
+}
+.led-bulb.on {
+  box-shadow: 0 0 8px var(--led-color, #ef4444), 0 0 16px var(--led-color, #ef4444);
+}
+.led-body {
+  position: absolute;
+  left: 50%;
+  top: 12px;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 5px;
+  background: #94a3b8;
+  border-radius: 0 0 2px 2px;
+}
+.led-leg {
+  position: absolute;
+  width: 2px;
+  background: #cbd5e1;
+  border-radius: 1px;
+  z-index: 1;
+}
+.led-leg.left-leg {
+  left: 12px;
+  top: 5px;
+  height: 22px;
+}
+.led-leg.right-leg {
+  right: 12px;
+  top: 5px;
+  height: 22px;
+}
+
+/* ── Resistor Component ── */
+
+.resistor-body {
+  position: absolute;
+  left: 50%;
+  top: 3px;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 14px;
+  background: #fbbf24;
+  border-radius: 4px;
+  border: 1px solid #d97706;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  z-index: 2;
+}
+.resistor-body .band {
+  width: 2px;
+  height: 10px;
+  border-radius: 1px;
+}
+.resistor-body .band:nth-child(1) { background: #b91c1c; }
+.resistor-body .band:nth-child(2) { background: #1d4ed8; }
+.resistor-body .band:nth-child(3) { background: #f59e0b; }
+.resistor-body .band:nth-child(4) { background: #fcd34d; }
+.resistor-leg {
+  position: absolute;
+  width: 2px;
+  background: #cbd5e1;
+  border-radius: 1px;
+  z-index: 1;
+}
+.resistor-leg.left-leg  {
+  left: 12px;
+  top: 5px;
+  height: 22px;
+}
+.resistor-leg.right-leg {
+  right: 12px;
+  top: 5px;
+  height: 22px;
+}
+
+/* ── Push Button Component ── */
+
+.button-cap {
+  position: absolute;
+  left: 50%;
+  top: -4px;
+  transform: translateX(-50%);
+  width: 34px;
+  height: 16px;
+  background: #64748b;
+  border-radius: 4px 4px 0 0;
+  border: 1px solid #475569;
+  border-bottom: none;
+  z-index: 3;
+  transition: transform 0.08s;
+  cursor: pointer;
+}
+.button-cap::after {
+  content: 'PUSH';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 7px;
+  font-weight: 800;
+  color: #cbd5e1;
+  letter-spacing: 0.5px;
+}
+.button-cap.pressed {
+  transform: translateX(-50%) translateY(2px);
+}
+.button-base {
+  position: absolute;
+  left: 50%;
+  top: 12px;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 5px;
+  background: #334155;
+  border-radius: 0 0 3px 3px;
+  border: 1px solid #1e293b;
+  border-top: none;
+}
+.button-leg {
+  position: absolute;
+  width: 2px;
+  background: #cbd5e1;
+  border-radius: 1px;
+  z-index: 1;
+}
+.button-leg.left-leg  {
+  left: 12px;
+  top: 5px;
+  height: 22px;
+}
+.button-leg.right-leg {
+  right: 12px;
+  top: 5px;
+  height: 22px;
+}
+/* =========================================================
+   Right panel - Code
+   ========================================================= */
+
+.sim-code-panel {
+  width: 340px;
+  background: var(--bg-card);
+  border-left: 1px solid var(--border);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.code-header {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.code-header h3 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.code-header .code-badge {
+  font-size: 0.6rem;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.code-editor-wrapper {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  background: #020617;
+}
+
+.code-editor-wrapper textarea {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  color: #e2e8f0;
+  border: none;
+  outline: none;
+  resize: none;
+  padding: 16px;
+  font-family: 'Courier New', 'Consolas', monospace;
+  font-size: 0.78rem;
+  line-height: 1.7;
+  tab-size: 2;
+  overflow: auto;
+}
+
+.code-editor-wrapper textarea:focus {
+  box-shadow: inset 0 0 0 1px rgba(59,130,246,0.3);
+}
+
+.code-footer {
+  padding: 8px 14px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* =========================================================
+   Status bar
+   ========================================================= */
+
+.sim-status {
+  background: var(--bg-dark);
+  color: var(--text-light);
+  padding: 6px 20px;
+  font-size: 0.72rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  border-top: 1px solid var(--border-dark);
+  min-height: 28px;
+}
+
+.status-msg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-dot.idle { background: var(--text-light); }
+.status-dot.running { background: var(--success); }
+.status-dot.error { background: var(--danger); }
+
+/* =========================================================
+   Color picker for LED
+   ========================================================= */
+
+.color-picker-popup {
+  position: absolute;
+  z-index: 20;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px;
+  box-shadow: var(--shadow-lg);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+}
+
+.color-option {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.color-option:hover {
+  transform: scale(1.2);
+}
+
+.color-option.selected {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary);
+}
+
+/* =========================================================
+   Modal / Overlay helper
+   ========================================================= */
+
+.sim-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 100;
+  display: none;
+}
+
+.sim-overlay.active {
+  display: block;
+}
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+
+@media (max-width: 1300px) {
+  .sim-code-panel {
+    width: 280px;
+  }
+  .arduino-board {
+    width: 540px;
+  }
+  .proto-row {
+    grid-template-columns: 18px repeat(15, 22px);
+  }
+  .proto-cell {
+    width: 22px;
+    height: 22px;
+  }
+  .proto-cell .hole {
+    width: 10px;
+    height: 10px;
+  }
+  .proto-gap {
+    width: 22px;
+    height: 22px;
+  }
+  .proto-row-label {
+    height: 22px;
+    font-size: 0.55rem;
+  }
+  .proto-col-label {
+    width: 22px;
+    height: 14px;
+    font-size: 0.5rem;
+  }
+  .proto-col-labels {
+    grid-template-columns: 18px repeat(15, 22px);
+  }
+  .arduino-pin {
+    width: 18px;
+    height: 12px;
+    font-size: 0.45rem;
+  }
+}
+
+@media (max-width: 1100px) {
+  .sim-subtoolbar .subtoolbar-label {
+    font-size: 0.75rem;
+  }
+  .sim-palette {
+    width: 120px;
+    padding: 8px;
+  }
+  .sim-code-panel {
+    width: 220px;
+  }
+  .arduino-board {
+    width: 420px;
+  }
+  .proto-row {
+    grid-template-columns: 16px repeat(15, 20px);
+  }
+  .proto-cell {
+    width: 20px;
+    height: 20px;
+  }
+  .proto-cell .hole {
+    width: 9px;
+    height: 9px;
+  }
+  .proto-gap {
+    width: 20px;
+    height: 20px;
+  }
+  .proto-row-label {
+    height: 20px;
+    font-size: 0.5rem;
+  }
+  .proto-col-label {
+    width: 20px;
+    height: 12px;
+    font-size: 0.45rem;
+  }
+  .proto-col-labels {
+    grid-template-columns: 16px repeat(15, 20px);
+  }
+  .arduino-pin {
+    width: 16px;
+    height: 11px;
+    font-size: 0.4rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .sim-subtoolbar {
+    padding: 6px 10px;
+    gap: 6px;
+  }
+  .sim-subtoolbar .subtoolbar-label {
+    font-size: 0.72rem;
+  }
+  .sim-subtoolbar .sim-select {
+    font-size: 0.72rem;
+    padding: 5px 8px;
+  }
+  .sim-subtoolbar .sim-btn {
+    font-size: 0.72rem;
+    padding: 5px 10px;
+  }
+  .sim-main {
+    flex-direction: column;
+  }
+  .sim-palette {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    max-height: 110px;
+    overflow-y: auto;
+    padding: 6px;
+  }
+  .palette-title {
+    width: 100%;
+    font-size: 0.65rem;
+  }
+  .palette-item {
+    flex: 0 0 auto;
+    min-width: 60px;
+    padding: 6px;
+    font-size: 0.65rem;
+  }
+  .sim-code-panel {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid var(--border);
+    max-height: 200px;
+  }
+  .arduino-board {
+    width: 95vw;
+    padding: 8px 8px 24px;
+  }
+  .proto-row {
+    grid-template-columns: 10px repeat(15, 13px);
+    gap: 0.5px;
+  }
+  .proto-cell {
+    width: 13px;
+    height: 13px;
+  }
+  .proto-cell .hole {
+    width: 6px;
+    height: 6px;
+  }
+  .proto-gap {
+    width: 13px;
+    height: 13px;
+  }
+  .proto-row-label {
+    height: 13px;
+    font-size: 0.45rem;
+  }
+  .proto-col-labels {
+    display: none;
+  }
+  .arduino-pin {
+    width: 13px;
+    height: 9px;
+    font-size: 0.35rem;
+  }
+  .workspace-canvas {
+    padding: 10px;
+  }
+}
+
+/* =========================================================
+   Syntax Highlighting (Arduino C++)
+   ========================================================= */
+.sim-code-panel .code-highlight-layer {
+  background: #020617;
+  color: #e2e8f0;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  padding: 14px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  tab-size: 4;
+  margin: 0;
+  overflow: auto;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.sim-code-panel .code-highlight-layer .syntax-comment  { color: #64748b; font-style: italic; }
+.sim-code-panel .code-highlight-layer .syntax-string   { color: #86efac; }
+.sim-code-panel .code-highlight-layer .syntax-number   { color: #fbbf24; }
+.sim-code-panel .code-highlight-layer .syntax-keyword  { color: #60a5fa; font-weight: 700; }
+.sim-code-panel .code-highlight-layer .syntax-function { color: #22d3ee; font-weight: 700; }
+.sim-code-panel .code-highlight-layer .syntax-type     { color: #fb7185; font-weight: 700; }
+.sim-code-panel .code-highlight-layer .syntax-constant { color: #facc15; font-weight: 700; }
+
+/* =========================================================
+   Tooltips on placed components
+   ========================================================= */
+.comp-tooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  border: 1px solid #334155;
+}
+
+.comp-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -4px;
+  width: 0; height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #334155;
+}
+
+/* =========================================================
+   Component Inspector Panel
+   ========================================================= */
+.sim-inspector {
+  border-top: 1px solid var(--border);
+  padding: 8px;
+  font-size: 0.65rem;
+  color: var(--text-light);
+}
+
+.sim-inspector .inspector-title {
+  font-weight: 700;
+  font-size: 0.65rem;
+  color: var(--text);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.sim-inspector .inspector-empty {
+  color: #94a3b8;
+  font-style: italic;
+  padding: 4px 0;
+}
+
+.sim-inspector .inspector-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px 0;
+  border-bottom: 1px solid #1e293b;
+}
+
+.sim-inspector .inspector-item:last-child {
+  border-bottom: none;
+}
+
+.sim-inspector .inspector-name {
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.sim-inspector .inspector-loc {
+  color: #64748b;
+  font-size: 0.6rem;
+}
+
+/* =========================================================
+   Page Hero – overrides for simulator
+   ========================================================= */
+.sim-page-hero {
+  padding: 40px max(4%, calc((100% - 1180px) / 2));
+  padding-bottom: 24px;
+}
+
+.sim-page-hero .hero-actions {
+  margin-top: 16px;
+}
+
+/* =========================================================
+   Wire source dot indicator on pins
+   ========================================================= */
+.arduino-pin.wire-source {
+  box-shadow: 0 0 0 3px #3b82f6;
+  z-index: 5;
+}

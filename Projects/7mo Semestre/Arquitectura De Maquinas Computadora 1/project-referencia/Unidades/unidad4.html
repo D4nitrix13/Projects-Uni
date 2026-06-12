@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unidad IV - Arquitectura de los Microcontroladores</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+  <header class="page-header">
+    <nav class="navbar">
+      <a href="../index.html" class="logo">Arquitectura de Máquinas</a>
+
+      <ul class="menu">
+        <li><a href="unidad1.html">Unidad I</a></li>
+        <li><a href="unidad2.html">Unidad II</a></li>
+        <li><a href="unidad3.html">Unidad III</a></li>
+        <li><a href="unidad4.html" class="active">Unidad IV</a></li>
+        <li><a href="unidad5.html">Unidad V</a></li>
+        <li><a href="tutoriales.html">Tutoriales</a></li>
+        <li><a href="arduino.html">Arduino</a></li>
+      </ul>
+    </nav>
+
+    <div class="page-title">
+      <span>Unidad IV</span>
+      <h1>Arquitectura de los Microcontroladores</h1>
+      <p>
+        En esta unidad se estudia la arquitectura interna de los microcontroladores,
+        sus tipos principales y las diferencias entre Harvard, Von Neumann, CISC y RISC.
+      </p>
+    </div>
+  </header>
+
+  <main class="section">
+
+    <article class="topic">
+      <h2>4.1 Arquitectura de los Microcontroladores</h2>
+
+      <p>
+        Un microcontrolador es un circuito integrado que contiene dentro de un mismo chip
+        varios componentes necesarios para controlar dispositivos electrónicos. Normalmente
+        incluye CPU, memoria, puertos de entrada y salida, temporizadores y módulos de comunicación.
+      </p>
+
+      <p>
+        A diferencia de un microprocesador, el microcontrolador está diseñado para tareas
+        específicas. Por eso se utiliza mucho en sistemas embebidos, automatización, robótica,
+        sensores, alarmas, electrodomésticos y dispositivos de control.
+      </p>
+    </article>
+
+    <article class="topic">
+      <h2>4.1.1 Diferentes Tipos de Microcontroladores</h2>
+
+      <h3>4.1.1.1 Microcontroladores Embebidos</h3>
+      <p>
+        Los microcontroladores embebidos están integrados dentro de un sistema diseñado
+        para cumplir una función específica. No se usan como una computadora general,
+        sino como controladores de tareas concretas.
+      </p>
+
+      <p>
+        Ejemplos de uso son lavadoras, controles remotos, alarmas, sensores de temperatura,
+        sistemas automotrices, impresoras, juguetes electrónicos y dispositivos médicos.
+      </p>
+
+      <h3>4.1.1.2 Microcontrolador con Memoria Externa</h3>
+      <p>
+        Algunos microcontroladores permiten conectarse a memoria externa cuando la memoria
+        interna no es suficiente. Esto se usa cuando el programa es más grande o cuando se
+        necesita almacenar más datos.
+      </p>
+
+      <div class="comparison">
+        <div>
+          <h3>Microcontrolador embebido</h3>
+          <p>
+            Está pensado para controlar una tarea específica dentro de un sistema electrónico.
+          </p>
+        </div>
+
+        <div>
+          <h3>Con memoria externa</h3>
+          <p>
+            Puede ampliar su capacidad usando memoria adicional fuera del chip.
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <article class="topic">
+      <h2>4.1.2 Arquitectura de Microcontroladores</h2>
+
+      <h3>4.1.2.1 Harvard vs Von Neumann</h3>
+
+      <p>
+        La arquitectura Harvard y la arquitectura Von Neumann describen la forma en que
+        el sistema organiza la memoria para guardar datos e instrucciones.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Arquitectura</th>
+            <th>Característica</th>
+            <th>Ventaja</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Harvard</td>
+            <td>Separa la memoria de datos y la memoria de instrucciones.</td>
+            <td>Puede acceder a datos e instrucciones al mismo tiempo.</td>
+          </tr>
+          <tr>
+            <td>Von Neumann</td>
+            <td>Usa una sola memoria para datos e instrucciones.</td>
+            <td>Su diseño es más simple y flexible.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>4.1.2.2 CISC vs RISC</h3>
+
+      <p>
+        CISC y RISC son enfoques de diseño del conjunto de instrucciones del procesador.
+        Se diferencian principalmente por la complejidad y cantidad de instrucciones.
+      </p>
+
+      <div class="comparison">
+        <div>
+          <h3>CISC</h3>
+          <p>
+            Significa computadora con conjunto complejo de instrucciones. Posee instrucciones
+            más completas, pero algunas pueden tardar más ciclos en ejecutarse.
+          </p>
+        </div>
+
+        <div>
+          <h3>RISC</h3>
+          <p>
+            Significa computadora con conjunto reducido de instrucciones. Usa instrucciones
+            simples, rápidas y eficientes.
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <article class="topic">
+      <h2>Importancia de la Arquitectura en Microcontroladores</h2>
+
+      <p>
+        Conocer la arquitectura de un microcontrolador permite seleccionar el dispositivo
+        adecuado para cada proyecto. Por ejemplo, un sistema de bajo consumo puede necesitar
+        un microcontrolador pequeño y eficiente, mientras que un proyecto más complejo puede
+        requerir más memoria, más puertos o mayor velocidad.
+      </p>
+    </article>
+
+    <article class="quiz" id="quiz-unidad4">
+      <h2>Quiz de Unidad IV</h2>
+      <p class="quiz-intro">
+        Responde las preguntas. Cuando termines, presiona “Terminar quiz” para ver
+        la retroalimentación.
+      </p>
+
+      <form class="quiz-form">
+
+        <input type="checkbox" id="finish-quiz" class="finish-check">
+
+        <div class="quiz-content">
+
+          <div class="question">
+            <p><strong>1.</strong> Selecciona la respuesta correcta: ¿qué integra normalmente un microcontrolador?</p>
+
+            <label class="option wrong">
+              <input type="radio" name="u4q1">
+              Solo una pantalla y un teclado.
+              <span class="result">
+                Incorrecto. Una pantalla y un teclado son periféricos, no los elementos internos principales.
+              </span>
+            </label>
+
+            <label class="option correct">
+              <input type="radio" name="u4q1">
+              CPU, memoria y puertos de entrada/salida en un mismo chip.
+              <span class="result">
+                Correcto. Esa integración es una característica principal del microcontrolador.
+              </span>
+            </label>
+
+            <label class="option wrong">
+              <input type="radio" name="u4q1">
+              Únicamente memoria externa.
+              <span class="result">
+                Incorrecto. Un microcontrolador puede usar memoria externa, pero normalmente integra más elementos.
+              </span>
+            </label>
+          </div>
+
+          <div class="question">
+            <p><strong>2.</strong> Verdadero o falso: la arquitectura Harvard separa memoria de datos y memoria de instrucciones.</p>
+
+            <label class="option correct">
+              <input type="radio" name="u4q2">
+              Verdadero
+              <span class="result">
+                Correcto. Harvard separa físicamente o lógicamente datos e instrucciones.
+              </span>
+            </label>
+
+            <label class="option wrong">
+              <input type="radio" name="u4q2">
+              Falso
+              <span class="result">
+                Incorrecto. Esa separación es precisamente una característica de Harvard.
+              </span>
+            </label>
+          </div>
+
+          <div class="question">
+            <p><strong>3.</strong> Selecciona la respuesta correcta: ¿qué caracteriza a RISC?</p>
+
+            <label class="option correct">
+              <input type="radio" name="u4q3">
+              Usa instrucciones simples, reducidas y rápidas.
+              <span class="result">
+                Correcto. RISC se basa en un conjunto reducido de instrucciones eficientes.
+              </span>
+            </label>
+
+            <label class="option wrong">
+              <input type="radio" name="u4q3">
+              Usa instrucciones extremadamente complejas siempre.
+              <span class="result">
+                Incorrecto. Eso se relaciona más con CISC.
+              </span>
+            </label>
+
+            <label class="option wrong">
+              <input type="radio" name="u4q3">
+              No utiliza instrucciones.
+              <span class="result">
+                Incorrecto. Todo procesador necesita instrucciones para ejecutar programas.
+              </span>
+            </label>
+          </div>
+
+          <div class="question fill-question">
+            <p><strong>4.</strong> Completa el concepto:</p>
+
+            <div class="fill-box">
+              <span>La arquitectura que separa memoria de datos e instrucciones es</span>
+              <input
+                type="text"
+                class="fill-input"
+                name="u4q4"
+                placeholder="Escribe aquí"
+                autocomplete="off"
+                required
+                pattern="[Hh][Aa][Rr][Vv][Aa][Rr][Dd]"
+              >
+            </div>
+
+            <div class="fill-feedback fill-ok">
+              <p><strong>Correcto:</strong> la respuesta “Harvard” es adecuada.</p>
+              <p>
+                Retroalimentación: Harvard permite manejar datos e instrucciones en memorias separadas.
+              </p>
+            </div>
+
+            <div class="fill-feedback fill-bad">
+              <p><strong>Incorrecto.</strong> La respuesta correcta es: <strong>Harvard</strong>.</p>
+              <p>
+                Retroalimentación: Harvard separa memoria de datos y memoria de instrucciones;
+                Von Neumann usa una memoria compartida.
+              </p>
+            </div>
+          </div>
+
+          <div class="question fill-question">
+            <p><strong>5.</strong> Completa el concepto:</p>
+
+            <div class="fill-box">
+              <span>La arquitectura con conjunto reducido de instrucciones se conoce como</span>
+              <input
+                type="text"
+                class="fill-input"
+                name="u4q5"
+                placeholder="Escribe aquí"
+                autocomplete="off"
+                required
+                pattern="[Rr][Ii][Ss][Cc]"
+              >
+            </div>
+
+            <div class="fill-feedback fill-ok">
+              <p><strong>Correcto:</strong> la respuesta “RISC” es adecuada.</p>
+              <p>
+                Retroalimentación: RISC utiliza instrucciones simples y eficientes.
+              </p>
+            </div>
+
+            <div class="fill-feedback fill-bad">
+              <p><strong>Incorrecto.</strong> La respuesta correcta es: <strong>RISC</strong>.</p>
+              <p>
+                Retroalimentación: RISC significa conjunto reducido de instrucciones;
+                CISC significa conjunto complejo de instrucciones.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="finish-area">
+          <label for="finish-quiz" class="btn finish-btn">Terminar quiz</label>
+        </div>
+
+        <div class="quiz-finished-actions">
+          <input type="reset" value="Repetir quiz" class="btn reset-btn">
+          <a href="unidad5.html" class="btn">Avanzar a la siguiente unidad</a>
+        </div>
+
+      </form>
+    </article>
+
+  </main>
+
+  <footer class="footer">
+    <p>Unidad IV - Arquitectura de Máquinas</p>
+  </footer>
+
+</body>
+</html>
