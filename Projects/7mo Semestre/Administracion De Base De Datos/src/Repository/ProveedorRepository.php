@@ -1,0 +1,104 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Repository;
+
+class ProveedorRepository
+{
+    public function __construct(private \PDO $connection) {}
+
+    public function obtenerProveedoresOrdenados(): array
+    {
+        $statement = $this->connection->query("
+            SELECT id_proveedor, nombre
+            FROM listar_proveedores_ordenados()
+        ");
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function crearProveedor(array $datos): void
+    {
+        $statement = $this->connection->prepare("
+            SELECT crear_proveedor_sistema(
+                :nombre, :telefono, :email, :direccion
+            ) AS creado
+        ");
+
+        $statement->execute([
+            ":nombre"    => $datos["nombre"],
+            ":telefono"  => $datos["telefono"],
+            ":email"     => $datos["email"],
+            ":direccion" => $datos["direccion"],
+        ]);
+    }
+
+    public function obtenerProveedoresFiltrados(string $busqueda, int $pagina = 1, int $porPagina = 15): array
+    {
+        $offset = ($pagina - 1) * $porPagina;
+
+        $statement = $this->connection->prepare("
+            SELECT id_proveedor, nombre, telefono, email, direccion
+            FROM buscar_proveedores_filtrados(:busqueda, :limit, :offset)
+        ");
+
+        $statement->execute([
+            ":busqueda" => trim($busqueda),
+            ":limit"    => $porPagina,
+            ":offset"   => $offset,
+        ]);
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function contarProveedoresFiltrados(string $busqueda): int
+    {
+        $statement = $this->connection->prepare("
+            SELECT COUNT(*) FROM buscar_proveedores_filtrados(:busqueda)
+        ");
+
+        $statement->execute([":busqueda" => trim($busqueda)]);
+
+        return (int) $statement->fetchColumn();
+    }
+
+    public function obtenerProveedorPorId(int $idProveedor): ?array
+    {
+        $statement = $this->connection->prepare("
+            SELECT id_proveedor, nombre, telefono, email, direccion
+            FROM obtener_proveedor_por_id(:id_proveedor)
+        ");
+
+        $statement->execute([":id_proveedor" => $idProveedor]);
+        $proveedor = $statement->fetch(\PDO::FETCH_ASSOC);
+
+        return $proveedor ?: null;
+    }
+
+    public function actualizarProveedor(array $datos): void
+    {
+        $statement = $this->connection->prepare("
+            SELECT actualizar_proveedor_sistema(
+                :id_proveedor, :nombre, :telefono, :email, :direccion
+            ) AS actualizado
+        ");
+
+        $statement->execute([
+            ":id_proveedor" => $datos["id_proveedor"],
+            ":nombre"       => $datos["nombre"],
+            ":telefono"     => $datos["telefono"],
+            ":email"        => $datos["email"],
+            ":direccion"    => $datos["direccion"],
+        ]);
+    }
+
+    public function eliminarProveedor(int $idProveedor): void
+    {
+        $statement = $this->connection->prepare("
+            SELECT eliminar_proveedor_sistema(:id_proveedor) AS eliminado
+        ");
+
+        $statement->execute([":id_proveedor" => $idProveedor]);
+    }
+}

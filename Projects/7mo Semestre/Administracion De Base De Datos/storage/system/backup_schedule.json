@@ -1,0 +1,9 @@
+{
+    "enabled": true,
+    "type": "full",
+    "interval_value": 1,
+    "interval_unit": "minutes",
+    "last_run_at": "2026-06-25 12:25:37",
+    "next_run_at": "2026-06-25 12:26:37",
+    "updated_at": "2026-06-25 11:08:39"
+}

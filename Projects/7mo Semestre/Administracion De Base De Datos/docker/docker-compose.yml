@@ -1,0 +1,94 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: pandas_app
+    ports:
+      - "8080:80"
+    volumes:
+      - ..:/var/www/html
+      - ../conf/php.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ../backups:/var/www/html/backups
+    depends_on:
+      - postgres
+      - mailpit
+    env_file:
+      - ../.env
+    environment:
+      TZ: America/Managua
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:18
+    container_name: pandas_bd
+    ports:
+      - "5432:5432"
+    env_file:
+      - ../.env
+    environment:
+      TZ: America/Managua
+      PGTZ: America/Managua
+      POSTGRES_DB: ${DB_DATABASE:-pandas_estampados_y_kitsune}
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-root}
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - ../database/postgresql:/var/lib/postgresql/data
+      - ../database/wal_archive:/wal_archive
+      - ../backups:/backups
+    command: >
+      postgres
+      -c timezone=America/Managua
+      -c wal_level=replica
+      -c archive_mode=on
+      -c archive_command='test ! -f /wal_archive/%f && cp %p /wal_archive/%f'
+    restart: unless-stopped
+
+  backup_scheduler:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: pandas_backup_scheduler
+    working_dir: /var/www/html
+    user: "33:33"
+    volumes:
+      - ..:/var/www/html
+      - ../backups:/var/www/html/backups
+    env_file:
+      - ../.env
+    environment:
+      TZ: America/Managua
+    command: >
+      sh -c "while true; do
+        php /var/www/html/utils/cron_backup.php;
+        sleep 60;
+      done"
+    restart: unless-stopped
+    depends_on:
+      - postgres
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pandas_pgadmin
+    ports:
+      - "5050:80"
+    environment:
+      TZ: America/Managua
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - ../database/pgadmin:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: pandas_mailpit
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    environment:
+      TZ: America/Managua
+    restart: unless-stopped
