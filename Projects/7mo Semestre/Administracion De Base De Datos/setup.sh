@@ -55,6 +55,46 @@ apply_volume_permissions() {
     sudo chmod 664 numero_de_whatsapp.txt 2>/dev/null || true
 }
 
+is_database_initialized() {
+    # Devuelve 0 si la BD ya tiene la tabla producto (señal de que
+    # el schema completo fue cargado), 1 si no.
+    # Usa information_schema (case-insensitive estándar SQL) en vez
+    # de to_regclass con comillas porque Postgres lowercase los
+    # identificadores no entrecomillados.
+    local exists
+    exists=$(docker exec pandas_bd psql -U postgres \
+        -d pandas_estampados_y_kitsune \
+        -tAc "SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'producto')" \
+        2>/dev/null | tr -d '[:space:]')
+    [ "$exists" = "t" ]
+}
+
+wait_for_postgres() {
+    until docker exec pandas_bd pg_isready -U postgres >/dev/null 2>&1; do
+        sleep 2
+    done
+}
+
+load_database_schema() {
+    # Carga los archivos sql/*.sql numerados en orden.
+    # Asume que Postgres está corriendo y la BD existe (puede estar vacía).
+    # NO es idempotente: si las tablas ya existen, los CREATE fallan.
+    # Por eso el caller debe chequear is_database_initialized primero
+    # (o, como cmd_fresh, partir de una BD recién borrada).
+    for sql_file in sql/01_data.sql sql/02_procedures.sql \
+                    sql/03_paginacion.sql sql/04_ranking_productos.sql \
+                    sql/05_plazos.sql sql/06_reportes_functions.sql; do
+        echo "  - $sql_file"
+        docker exec -i pandas_bd psql \
+            -U postgres \
+            -d pandas_estampados_y_kitsune \
+            < "$sql_file" || {
+                echo "❌ Falló cargar $sql_file"
+                exit 1
+            }
+    done
+}
+
 show_help() {
     echo "Uso: ./setup.sh [comando]"
     echo ""
@@ -77,6 +117,15 @@ cmd_up() {
     apply_volume_permissions
     echo "=== Levantando contenedores ==="
     docker compose -f "$COMPOSE_FILE" up -d
+
+    echo "Esperando que PostgreSQL esté listo..."
+    wait_for_postgres
+
+    if ! is_database_initialized; then
+        echo "⚠️  Base de datos vacía — cargando esquema y datos por primera vez..."
+        load_database_schema
+    fi
+
     echo ""
     echo "=========================================="
     echo "  Proyecto listo!"
@@ -201,40 +250,7 @@ EOF
 
     echo ""
     echo "=== 8) Cargando esquema y datos ==="
-    docker exec -i pandas_bd psql \
-        -U postgres \
-        -d pandas_estampados_y_kitsune \
-        < sql/01_data.sql
-
-    echo "Cargando procedimientos y funciones base..."
-    docker exec -i pandas_bd psql \
-        -U postgres \
-        -d pandas_estampados_y_kitsune \
-        < sql/02_procedures.sql
-
-    echo "Cargando funciones de paginación..."
-    docker exec -i pandas_bd psql \
-        -U postgres \
-        -d pandas_estampados_y_kitsune \
-        < sql/03_paginacion.sql
-
-    echo "Cargando funciones de ranking..."
-    docker exec -i pandas_bd psql \
-        -U postgres \
-        -d pandas_estampados_y_kitsune \
-        < sql/04_ranking_productos.sql
-
-    echo "Cargando tablas de plazos..."
-    docker exec -i pandas_bd psql \
-        -U postgres \
-        -d pandas_estampados_y_kitsune \
-        < sql/05_plazos.sql
-
-    echo "Cargando funciones de reportes..."
-    docker exec -i pandas_bd psql \
-        -U postgres \
-        -d pandas_estampados_y_kitsune \
-        < sql/06_reportes_functions.sql
+    load_database_schema
 
     echo "Esquema y funciones cargados correctamente."
     echo ""
