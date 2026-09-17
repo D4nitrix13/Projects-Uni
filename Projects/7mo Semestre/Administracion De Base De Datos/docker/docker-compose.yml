@@ -8,6 +8,7 @@ services:
       - "8080:80"
     volumes:
       - ..:/var/www/html
+      - vendor:/var/www/html/vendor
       - ../conf/php.ini:/usr/local/etc/php/conf.d/custom.ini
       - ../backups:/var/www/html/backups
     depends_on:
@@ -54,6 +55,7 @@ services:
     user: "33:33"
     volumes:
       - ..:/var/www/html
+      - vendor:/var/www/html/vendor
       - ../backups:/var/www/html/backups
     env_file:
       - ../.env
@@ -87,8 +89,12 @@ services:
     image: axllent/mailpit:latest
     container_name: pandas_mailpit
     ports:
-      - "8025:8025"
-      - "1025:1025"
+      - "8026:8025"
+      - "1026:1025"
     environment:
       TZ: America/Managua
     restart: unless-stopped
+
+volumes:
+  vendor:
+

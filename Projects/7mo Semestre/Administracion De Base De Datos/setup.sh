@@ -3,6 +3,58 @@ set -e
 
 COMPOSE_FILE="docker/docker-compose.yml"
 
+ensure_env_file() {
+    if [ ! -f .env ]; then
+        if [ -f .env.example ]; then
+            cp .env.example .env
+            echo "✅ .env creado desde .env.example (modo desarrollo)"
+            echo "⚠️  Revisa los valores por defecto antes de producción"
+        else
+            echo "❌ ERROR: .env.example no existe. No se puede generar .env."
+            exit 1
+        fi
+    fi
+}
+
+ensure_directory_structure() {
+    # Solo crea el árbol de directorios. Corre como el usuario actual
+    # (sin sudo). Debe llamarse ANTES de generar archivos que el usuario
+    # necesita escribir (ej. JSONs de config inicial en cmd_fresh).
+    mkdir -p storage/system
+    mkdir -p backups/manual backups/full backups/diff backups/logs
+    mkdir -p database/postgresql database/wal_archive database/pgadmin database/logs
+    mkdir -p uploads/productos
+}
+
+apply_volume_permissions() {
+    # Aplica owners y permisos correctos vía sudo. Asume que los directorios
+    # ya existen. Sin esto, docker los crea como root:root y:
+    #   - postgres (UID 999) no puede escribir en /wal_archive
+    #   - pgAdmin (UID 5050) no puede leer/escribir su data dir
+    #   - PHP/Apache (UID 33) no puede escribir storage/backups/uploads
+    #
+    # Si sudo falla, el script aborta (set -e). Eso es lo correcto:
+    # un setup roto a mitad de camino es peor que un error visible.
+
+    sudo chown -R 33:33 storage backups uploads
+    sudo chmod -R 775 storage backups uploads
+    sudo find storage backups uploads -type f -exec chmod 664 {} \;
+    sudo find storage backups uploads -type d -exec chmod 775 {} \;
+
+    sudo chown -R 999:999 database/postgresql database/wal_archive
+    sudo chmod 700 database/postgresql
+    sudo chmod -R 775 database/wal_archive
+    sudo find database/wal_archive -type f -exec chmod 664 {} \;
+    sudo find database/wal_archive -type d -exec chmod 775 {} \;
+
+    sudo chown -R 5050:5050 database/pgadmin
+    sudo chmod -R 700 database/pgadmin
+
+    [ -f numero_de_whatsapp.txt ] || echo "+50500000000" > numero_de_whatsapp.txt
+    sudo chown 33:33 numero_de_whatsapp.txt 2>/dev/null || true
+    sudo chmod 664 numero_de_whatsapp.txt 2>/dev/null || true
+}
+
 show_help() {
     echo "Uso: ./setup.sh [comando]"
     echo ""
@@ -20,6 +72,9 @@ show_help() {
 }
 
 cmd_up() {
+    ensure_env_file
+    ensure_directory_structure
+    apply_volume_permissions
     echo "=== Levantando contenedores ==="
     docker compose -f "$COMPOSE_FILE" up -d
     echo ""
@@ -27,44 +82,53 @@ cmd_up() {
     echo "  Proyecto listo!"
     echo "  URL: http://localhost:8080"
     echo "  pgAdmin: http://localhost:5050"
-    echo "  Mailpit: http://localhost:8025"
+    echo "  Mailpit: http://localhost:8026"
     echo "=========================================="
 }
 
 cmd_down() {
+    ensure_env_file
     echo "=== Deteniendo y eliminando contenedores + volúmenes ==="
     docker compose -f "$COMPOSE_FILE" down --remove-orphans -v
 }
 
 cmd_stop() {
+    ensure_env_file
     echo "=== Deteniendo contenedores ==="
     docker compose -f "$COMPOSE_FILE" stop
 }
 
 cmd_start() {
+    ensure_env_file
     echo "=== Iniciando contenedores ==="
     docker compose -f "$COMPOSE_FILE" start
 }
 
 cmd_restart() {
+    ensure_env_file
+    apply_volume_permissions
     echo "=== Reiniciando contenedores ==="
     docker compose -f "$COMPOSE_FILE" restart
 }
 
 cmd_build() {
+    ensure_env_file
     echo "=== Reconstruyendo imagen app (con caché) ==="
     docker compose -f "$COMPOSE_FILE" build app
 }
 
 cmd_logs() {
+    ensure_env_file
     docker compose -f "$COMPOSE_FILE" logs -f
 }
 
 cmd_status() {
+    ensure_env_file
     docker compose -f "$COMPOSE_FILE" ps
 }
 
 cmd_fresh() {
+    ensure_env_file
     echo "!!! REINSTALACIÓN COMPLETA - Se borrarán todos los datos !!!"
     echo "Presiona Ctrl+C en los próximos 5 segundos para cancelar..."
     sleep 5
@@ -78,34 +142,11 @@ cmd_fresh() {
     sudo rm -rf storage/ backups/ database/
 
     echo ""
-    echo "=== 3) Creando estructura del proyecto ==="
-    mkdir -p storage/system
-    mkdir -p backups/manual backups/full backups/diff backups/logs
-    mkdir -p database/postgresql database/wal_archive database/pgadmin database/logs
-    mkdir -p uploads/productos
+    echo "=== 3) Creando estructura de directorios ==="
+    ensure_directory_structure
 
     echo ""
-    echo "=== 4) Generando .env ==="
-    if [ ! -f .env ]; then
-        cp .env.example .env
-        echo ".env creado desde .env.example"
-    fi
-
-    echo ""
-    echo "=== 5) Instalando dependencias PHP ==="
-    echo "Levantando PostgreSQL..."
-    docker compose -f "$COMPOSE_FILE" up -d postgres
-
-    echo "Esperando que PostgreSQL esté listo..."
-    until docker exec pandas_bd pg_isready -U postgres >/dev/null 2>&1; do
-        sleep 2
-    done
-
-    echo "Instalando dependencias con Composer..."
-    docker compose -f "$COMPOSE_FILE" run --rm app composer install --no-interaction --prefer-dist
-
-    echo ""
-    echo "=== 6) Generando archivos de configuración ==="
+    echo "=== 4) Generando archivos de configuración (como usuario) ==="
     cat > storage/system/backup_schedule.json <<'EOF'
 {
     "enabled": true,
@@ -126,35 +167,30 @@ EOF
     echo "[]" > storage/system/plazos.json
     echo "[]" > backups/logs/delete_queue.json
 
-    if [ ! -f numero_de_whatsapp.txt ]; then
-        echo "+50500000000" > numero_de_whatsapp.txt
-    fi
-
-    echo ""
-    echo "=== 7) Configurando permisos ==="
-    sudo chown -R 33:33 storage backups uploads
-    sudo chown 33:33 numero_de_whatsapp.txt 2>/dev/null || true
-    sudo chmod 664 numero_de_whatsapp.txt 2>/dev/null || true
-    sudo chmod -R 775 storage backups uploads
-    sudo find storage backups uploads -type f -exec chmod 664 {} \;
-    sudo find storage backups uploads -type d -exec chmod 775 {} \;
-
-    sudo chown -R 999:999 database/postgresql database/wal_archive
-    sudo chmod -R 700 database/postgresql
-    sudo chmod -R 775 database/wal_archive
-    sudo find database/wal_archive -type f -exec chmod 664 {} \;
-    sudo find database/wal_archive -type d -exec chmod 775 {} \;
-
-    sudo chown -R 5050:5050 database/pgadmin
-    sudo chmod -R 700 database/pgadmin
-
     chmod +x scripts/backup_full.sh
     chmod +x scripts/backup_diff.sh
     chmod +x scripts/backup_logs.sh
     chmod +x scripts/mantenimiento_bd.sh
 
     echo ""
-    echo "=== 8) Levantando todos los contenedores ==="
+    echo "=== 5) Aplicando permisos (sudo) ==="
+    apply_volume_permissions
+
+    echo ""
+    echo "=== 6) Instalando dependencias PHP ==="
+    echo "Levantando PostgreSQL..."
+    docker compose -f "$COMPOSE_FILE" up -d postgres
+
+    echo "Esperando que PostgreSQL esté listo..."
+    until docker exec pandas_bd pg_isready -U postgres >/dev/null 2>&1; do
+        sleep 2
+    done
+
+    echo "Instalando dependencias con Composer..."
+    docker compose -f "$COMPOSE_FILE" run --rm app composer install --no-interaction --prefer-dist
+
+    echo ""
+    echo "=== 7) Levantando todos los contenedores ==="
     docker compose -f "$COMPOSE_FILE" build app
     docker compose -f "$COMPOSE_FILE" up -d
 
@@ -164,7 +200,7 @@ EOF
     done
 
     echo ""
-    echo "=== 9) Cargando esquema y datos ==="
+    echo "=== 8) Cargando esquema y datos ==="
     docker exec -i pandas_bd psql \
         -U postgres \
         -d pandas_estampados_y_kitsune \
@@ -206,7 +242,7 @@ EOF
     echo "  Proyecto listo!"
     echo "  URL: http://localhost:8080"
     echo "  pgAdmin: http://localhost:5050"
-    echo "  Mailpit: http://localhost:8025"
+    echo "  Mailpit: http://localhost:8026"
     echo "=========================================="
 }
 
