@@ -8,6 +8,7 @@ desktop.ini
 tasks/
 .vscode/
 .idea/
+.atl/
 *.swp
 *.swo
 *.tmp
@@ -55,6 +56,13 @@ uploads/*
 !uploads/productos/
 uploads/productos/*
 !uploads/productos/.gitkeep
+
+# ==============================
+# Estado de runtime (regenerado por setup.sh fresh o por la app)
+# ==============================
+storage/system/*
+!storage/system/.gitkeep
+numero_de_whatsapp.txt
 
 # ==============================
 # Respaldos de base de datos
